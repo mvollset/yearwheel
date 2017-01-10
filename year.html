@@ -1,0 +1,406 @@
+<html>
+
+<head>
+	<link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
+	<script src="//d3js.org/d3.v3.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
+
+	<style>
+		body {
+			font-family: Myriad, 'Roboto', sans-serif;
+			font-weight: thin;
+		}
+		
+		#datapanel {
+			position: absolute;
+			display: block;
+			z-index: 1000;
+			top: 200px;
+			left: 200px;
+			opacity: .95;
+		}
+		
+		.monthArc {
+			fill: #e3e4e5;
+			stroke: #fff;
+		}
+		
+		.monthText {
+			stroke: #fff;
+			fill: #fff;
+		}
+		
+		.arcer {
+			stroke-weight: 0.1;
+			fill: #4259f4;
+		}
+		
+		.level1 {
+			fill: #28823a
+		}
+		
+		.link {
+			fill: "none";
+			stroke: #000;
+			stroke-width: 1.5px;
+		}
+		
+		.activityText {
+			stroke: #fff;
+			fill: #fff;
+		}
+		
+		.jumbotron {
+			background-color: #fff;
+		}
+		
+		.btn-circle {
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			padding: 6px 0;
+			font-size: 12px;
+			line-height: 1.428571429;
+			border-radius: 15px;
+		}
+		
+		.btn-circle.btn-lg {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+		}
+		
+		.btn-circle.btn-xl {
+			width: 70px;
+			height: 70px;
+			padding: 10px 16px;
+			font-size: 24px;
+			line-height: 1.33;
+			border-radius: 35px;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-bottom">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav navbar-right dropup">
+				<li>
+					<button type="button" class="btn btn-circle btn-danger" data-toggle="dropdown">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="#" id="menuNewActivity">New activity</a></li>
+						<li><a href="#" id="menuNewEvent">New event</a></li>
+						<li><a href="#" id="showData">View data</a></li>
+						<li><a href="#" id="menuSaveAsImage">Save as Image</a></li>
+
+					</ul>
+				</li>
+			</ul>
+		</div>
+		</ul>
+		</div>
+	</nav>
+	<div id="ff" class="jumbotron">
+		<div id="chart">
+		</div>
+	</div>
+	<div class="container hidden" id="datapanel">
+		<div id="data" class="panel panel-default">
+			<div class="panel-heading">Activities</div>
+			<div class="panel-body">
+				Activities have both start and end dates, level decides which "ring" it will be displayed in, 0 is blue and 1 is green.
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<table id="tblActivities" class="table">
+
+					</table>
+				</div>
+				<div class="col-lg-6 hidden" id="activityForm">
+					<div class="well">
+						<input type="hidden" value="" name="activityN" id="activityN" />
+						<label for="eventName">Name</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="activityName" id="activityName" />
+						</div>
+						<label for="activityStartDate">Start Date</label>
+						<div class="input-group">
+							<input type="date" class="form-control" name="activityStartDate" id="activityStartDate" />
+						</div>
+						<label for="activityEndDate">End Date</label>
+						<div class="input-group">
+							<input type="date" class="form-control" name="activityEndDate" id="activityEndDate" />
+						</div>
+						<label for="level">Level</label>
+						<div class="input-group">
+							<input type="spinner" class="form-control" name="level" id="level" />
+						</div>
+						<button type="button" class="btn btn-circle btn-success" id="btnSaveActivity">
+						<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+					</button>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Events</div>
+				<div class="panel-body">
+					Events are dates of importance.
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<table id="tblEvents" class="table">
+
+						</table>
+					</div>
+					<div class="col-lg-6 hidden" id="eventForm">
+						<div class="well">
+							<input type="hidden" value="" name="eventN" id="eventN" />
+							<label for="eventName">Name</label>
+							<div class="input-group">
+								<input type="text" class="form-control" name="eventName" id="eventName" />
+							</div>
+							<label for="eventDate">Date</label>
+							<div class="input-group">
+								<input type="date" class="form-control" name="eventDate" id="eventDate" />
+							</div>
+							<button type="button" class="btn btn-circle btn-success" id="btnSaveEvent">
+						<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+						</<div>
+					</button>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn btn-circle btn-danger" id="btnHideData">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+			</div>
+			<script src="scripts/savesvgaspng.js"></script>
+			<script src="scripts/d3yearwheel.js"></script>
+			<script type="text/javascript">
+				/*global moment*/
+				/*global d3*/
+				/*global $*/
+				//Data
+				var wheelName="_Dummy";
+				var activityData = [{
+					name: "Aktivitet X",
+					startDateID: 0,
+					endDateID: 119,
+					level: 0
+				}, {
+					name: "Aktivitet Y",
+					startDateID: 119,
+					endDateID: 153,
+					level: 0
+				}, {
+					name: "Pureservice publikum",
+					startDateID: 0,
+					endDateID: 58,
+					level: 1
+				}, {
+					name: "Pureservice Utstyrsregister",
+					startDateID: 59,
+					endDateID: 211,
+					level: 1
+				}];
+				var eventData = [{
+						name: "Connect",
+						startDateID: 311
+					}, {
+						name: "Nythun (ServiceNow)",
+						startDateID: 35
+					}
+
+				]
+				var defaultWheel=localStorage.getItem("defaultWheel");
+				
+				if(defaultWheel)
+					{
+						let wheel=JSON.parse(localStorage.getItem('wheel-'+defaultWheel));
+						eventData=wheel.eventData;
+						activityData=wheel.activityData;
+						wheelName=wheel.name;
+						
+					}
+				else{
+					var dd=localStorage.getItem('wheel-' + wheelName);
+					if(dd){
+						let wheel=JSON.parse(dd);
+						eventData=wheel.eventData;
+						activityData=wheel.activityData;
+						wheelName=wheel.name;
+					}
+				}
+				var wheels=JSON.parse(localStorage.getItem('wheels'));
+				
+				
+				eventData.push({
+					name: "I dag",
+					startDateID: moment().dayOfYear()
+				});
+
+				renderData(activityData, eventData);
+
+
+
+				function dateIDRenderer(data, type, full, meta) {
+					if (type == "display") {
+						var startOfYear = moment().startOf('year');
+						return startOfYear.add(data, 'days').format('D. MMM');
+					}
+					return data;
+				}
+				var activityTable = $('#tblActivities').DataTable({
+					data: activityData,
+					select: true,
+					order: [
+						[1, 'asc']
+					],
+					columns: [{
+						title: "Name",
+						data: "name"
+					}, {
+						title: "Start",
+						data: "startDateID",
+						render: dateIDRenderer
+					}, {
+						title: "End",
+						data: "endDateID",
+						render: dateIDRenderer
+					}, {
+						title: "Level",
+						data: "level"
+					}]
+				});
+				var eventTable = $('#tblEvents').DataTable({
+					data: eventData,
+					select: true,
+					order: [
+						[1, 'asc']
+					],
+					columns: [{
+						title: "Name",
+						data: "name"
+					}, {
+						title: "Date",
+						data: "startDateID",
+						render: dateIDRenderer
+					}]
+				});
+				$(document).ready(function() {
+					$('#showData').on('click', function(e) {
+						e.preventDefault();
+						showData();
+
+					});
+					$('#menuNewEvent').on('click', function(e) {
+						e.preventDefault();
+						showData();
+						showNewEvent();
+
+					})
+					$('#menuNewActivity').on('click', function(e) {
+						e.preventDefault();
+						showData();
+						showNewActivity();
+
+					})
+					$('#btnSaveEvent').on('click', function(e) {
+						saveEvent();
+
+
+					});
+					$('#btnSaveActivity').on('click', function(e) {
+						saveActivity();
+
+
+					});
+					$('#btnHideData').on('click', function(e) {
+						hideData();
+
+
+					});
+					$('#menuSaveAsImage').on('click', function(e) {
+						saveAsPng();
+					});
+
+				});
+
+				function showData() {
+					$('#datapanel').removeClass('hidden');
+				}
+
+				function hideData() {
+					$('#datapanel').addClass('hidden');
+
+				}
+
+				function saveActivity() {
+					var name = $('#activityName').val();
+					var startdate = $('#activityStartDate').val();
+					var enddate = $('#activityEndDate').val();
+					var startDateID = moment(startdate).dayOfYear();
+					var endDateID = moment(enddate).dayOfYear();
+					var ev = {
+						name: name,
+						startDateID: startDateID,
+						endDateID: endDateID,
+						level: parseInt($('#level').val())
+					};
+					activityData.push(ev);
+					renderData(activityData, eventData);
+					activityTable.row.add(ev).draw();
+					saveToLocalStorage();
+				}
+
+				function saveEvent() {
+					var name = $('#eventName').val();
+					var edate = $('#eventDate').val();
+					var startDateID = moment(edate).dayOfYear();
+					var ev = {
+						name: name,
+						startDateID: startDateID
+					};
+					eventData.push(ev);
+					renderData(activityData, eventData);
+					eventTable.row.add(ev).draw();
+					saveToLocalStorage();
+				}
+				function saveToLocalStorage(){
+					localStorage.setItem('wheel-' + wheelName, JSON.stringify({name:wheelName,activityData:activityData,eventData:eventData}));
+				}
+				function showNewEvent() {
+					$('#eventForm').removeClass('hidden');
+					$('#eventN').val("");
+					$('#eventName').val("New Event");
+
+				}
+
+				function showNewActivity() {
+					$('#activityForm').removeClass('hidden');
+					$('#activityN').val("");
+					$('#activityName').val("New Event");
+
+				}
+
+				function saveAsPng() {
+					var tempstyle = $('#thewheel').attr('style');
+					$('#thewheel').attr('style', '');
+					saveSvgAsPng(document.getElementById('thewheel'), 'wheel.png');
+					$('#thewheel').attr('style', tempstyle);
+				}
+			</script>
+</body>
+
+</html>
