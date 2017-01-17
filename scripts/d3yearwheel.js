@@ -47,8 +47,8 @@
 			startDateID: 334,
 			endDateID: 364
 		}];
-	
-	////////////////////////////////////////////////////////////
+
+		////////////////////////////////////////////////////////////
 		//////////////////////// Set-up ////////////////////////////
 		////////////////////////////////////////////////////////////
 
@@ -67,13 +67,24 @@
 			width = Math.min(screenWidth) - margin.left - margin.right,
 			height = Math.min(screenWidth) - margin.top - margin.bottom;
 		var radix = width * 0.7 / 2;
+		var myC = circleGen()
+			.x(function(d) {
+				return 0;
+			})
+			.y(function(d) {
+				return 0;
+			})
+			.r(function(d) {
+				return radix + 15;
+			});
 		var svg = d3.select("#chart").append("svg").attr('id', "thewheel")
 			.attr("width", (width + margin.left + margin.right))
 			.attr("height", (height + margin.top + margin.bottom))
 			.attr("style", "margin-left:" + xoffset + "px;")
 			.append("g").attr("class", "wrapper")
-			.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
-
+			.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
+			//Add a circular path to animate days....
+	
 		////////////////////////////////////////////////////////////
 		//////////////////// Scales & Data /////////////////////////
 		////////////////////////////////////////////////////////////
@@ -126,7 +137,7 @@
 					.attr("d", newArc)
 					.style("fill", "none");
 			});
-
+		
 		//Append the month names within the arcs
 		svg.selectAll(".monthText")
 			.data(monthData)
@@ -143,7 +154,11 @@
 			.text(function(d) {
 				return d.month.toUpperCase();
 			});
-
+		var eventKeyfn=function(d){
+			if(!d)
+				return null;
+			return d.startDateID;
+		}
 		function renderData(activities, events) {
 
 			//Handles the mo
@@ -203,7 +218,7 @@
 				});
 
 			var events = svg.selectAll('.circle')
-				.data(eventData);
+				.data(eventData,eventKeyfn);
 			events.exit().remove();
 			var g = events.enter().append("g").attr("class", 'circle');
 
@@ -238,12 +253,50 @@
 				.text(function(d) {
 					return d.name
 				});
-			events.transition().
-			duration(500)
-				.attr("cx", function(d) {
-					return ((radix) + 15) * Math.sin(d.startDateID * gtoradians);
-				})
-				.attr("cy", function(d) {
-					return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
-				})
-		}
+
+}
+			//Function for generating a circular path
+			function circleGen() {
+				//set defaults
+				var r = function(d) {
+						return d.radius;
+					},
+					x = function(d) {
+						return d.x;
+					},
+					y = function(d) {
+						return d.y;
+					};
+
+				//returned function to generate circle path
+				function circle(d) {
+					var cx = d3.functor(x).call(this, d),
+						cy = d3.functor(y).call(this, d),
+						myr = d3.functor(r).call(this, d);
+
+					return "M" + cx + "," + cy + " " +
+						"m" + -myr + ", 0 " +
+						"a" + myr + "," + myr + " 0 1,0 " + myr * 2 + ",0 " +
+						"a" + myr + "," + myr + " 0 1,0 " + -myr * 2 + ",0Z";
+				}
+
+				//getter-setter methods
+				circle.r = function(value) {
+					if (!arguments.length) return r;
+					r = value;
+					return circle;
+				};
+				circle.x = function(value) {
+					if (!arguments.length) return x;
+					x = value;
+					return circle;
+				};
+				circle.y = function(value) {
+					if (!arguments.length) return y;
+					y = value;
+					return circle;
+				};
+
+				return circle;
+			}
+		
