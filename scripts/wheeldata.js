@@ -13,13 +13,20 @@
 					startDateID: 119,
 					endDateID: 153,
 					level: 0
-				}, {
+				},
+				 {
+					name: "Aktivitet Z",
+					startDateID: 153,
+					endDateID: 170,
+					level: 0
+				}
+				, {
 					name: "Ekstra moro",
 					startDateID: 0,
 					endDateID: 58,
 					level: 1
 				}, {
-					name: "Sommer ferie",
+					name: "Sommerferie",
 					startDateID: 150,
 					endDateID: 256,
 					level: 1

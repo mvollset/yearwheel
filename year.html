@@ -1,93 +1,20 @@
 <html>
 
 <head>
-	<link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+	<!--<link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />-->
+	<link href="/css/sopra.css" rel="stylesheet" />
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.css" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<link href="/css/mystyle.css" rel="stylesheet" />
+	<link href="/css/personal.css" rel="stylesheet" />
+	<--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
 	<script type="text/javascript" src="//cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
 	<script src="//d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
 
-	<style>
-		body {
-			font-family: Myriad, 'Roboto', sans-serif;
-			font-weight: thin;
-		}
-		
-		#datapanel {
-			position: absolute;
-			display: block;
-			z-index: 1000;
-			top: 200px;
-			left: 200px;
-			opacity: .95;
-		}
-		
-		.monthArc {
-			fill: #e3e4e5;
-			stroke: #fff;
-		}
-		
-		.monthText {
-			stroke: #fff;
-			fill: #fff;
-		}
-		
-		.arcer {
-			stroke-weight: 0.1;
-			fill: #4259f4;
-		}
-		
-		.level1 {
-			fill: #28823a
-		}
-		
-		.link {
-			fill: "none";
-			stroke: #000;
-			stroke-width: 1.5px;
-		}
-		
-		.activityText {
-			stroke: #fff;
-			fill: #fff;
-		}
-		
-		.jumbotron {
-			background-color: #fff;
-		}
-		
-		.btn-circle {
-			width: 30px;
-			height: 30px;
-			text-align: center;
-			padding: 6px 0;
-			font-size: 12px;
-			line-height: 1.428571429;
-			border-radius: 15px;
-		}
-		
-		.btn-circle.btn-lg {
-			width: 50px;
-			height: 50px;
-			padding: 10px 16px;
-			font-size: 18px;
-			line-height: 1.33;
-			border-radius: 25px;
-		}
-		
-		.btn-circle.btn-xl {
-			width: 70px;
-			height: 70px;
-			padding: 10px 16px;
-			font-size: 24px;
-			line-height: 1.33;
-			border-radius: 35px;
-		}
-	</style>
+
 </head>
 
 <body>
@@ -114,12 +41,14 @@
 	<div id="ff" class="jumbotron">
 		<div id="chart">
 		</div>
+		<input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--monthTextColor', this.value);document.documentElement.style.setProperty('--level1Color', this.value);"></input>
+		<button onclick="addPersonalTouch()">Add some style</button>
 	</div>
 	<div class="container hidden" id="datapanel">
 		<div id="data" class="panel panel-default">
 			<div class="panel-heading">Activities</div>
 			<div class="panel-body">
-				Activities have both start and end dates, level decides which "ring" it will be displayed in, 0 is blue and 1 is green.
+				Activities have both start and end dates, level decides which "circle" it will be displayed in, 0 is blue and 1 is green.
 			</div>
 			<div class="row">
 				<div class="col-lg-6">
@@ -187,253 +116,8 @@
 			</div>
 			<script src="scripts/savesvgaspng.js"></script>
 			<script src="scripts/d3yearwheel.js"></script>
-			<script type="text/javascript">
-				/*global moment*/
-				/*global d3*/
-				/*global $*/
-				//Data
-				var wheelName = "_Dummy";
-				var activityData = [{
-					name: "Aktivitet X",
-					startDateID: 0,
-					endDateID: 119,
-					level: 0
-				}, {
-					name: "Aktivitet Y",
-					startDateID: 119,
-					endDateID: 153,
-					level: 0
-				}, {
-					name: "Pureservice publikum",
-					startDateID: 0,
-					endDateID: 58,
-					level: 1
-				}, {
-					name: "Pureservice Utstyrsregister",
-					startDateID: 59,
-					endDateID: 211,
-					level: 1
-				}];
-				var eventData = [{
-						name: "Connect",
-						startDateID: 311
-					}, {
-						name: "Nythun (ServiceNow)",
-						startDateID: 35
-					}
-
-				]
-				var defaultWheel = localStorage.getItem("defaultWheel");
-
-				if (defaultWheel) {
-					let wheel = JSON.parse(localStorage.getItem('wheel-' + defaultWheel));
-					eventData = wheel.eventData;
-					activityData = wheel.activityData;
-					wheelName = wheel.name;
-
-				}
-				else {
-					var dd = localStorage.getItem('wheel-' + wheelName);
-					if (dd) {
-						let wheel = JSON.parse(dd);
-						eventData = wheel.eventData;
-						activityData = wheel.activityData;
-						wheelName = wheel.name;
-					}
-				}
-				var wheels = JSON.parse(localStorage.getItem('wheels'));
-
-
-				eventData.push({
-					name: "I dag",
-					startDateID: moment().dayOfYear()
-				});
-
-				renderData(activityData, eventData);
-
-
-				var startOfYear = moment().startOf('year');
-				function dateIDRenderer(data, type, full, meta) {
-					if (type == "display") {
-						
-						return moment().startOf('year').add(data, 'days').format('D. MMM');
-					}
-					return data;
-				}
-				var activityTable = $('#tblActivities').DataTable({
-					data: activityData,
-					select: true,
-					order: [
-						[1, 'asc']
-					],
-					columns: [{
-						title: "Name",
-						data: "name"
-					}, {
-						title: "Start",
-						data: "startDateID",
-						render: dateIDRenderer
-					}, {
-						title: "End",
-						data: "endDateID",
-						render: dateIDRenderer
-					}, {
-						title: "Level",
-						data: "level"
-					}]
-				});
-				var eventTable = $('#tblEvents').DataTable({
-					data: eventData,
-					select: true,
-					order: [
-						[1, 'asc']
-					],
-					columns: [{
-						title: "Name",
-						data: "name"
-					}, {
-						title: "Date",
-						data: "startDateID",
-						render: dateIDRenderer
-					}]
-				});
-				eventTable.on('select', function(e, dt, type, indexes) {
-					if (type === 'row') {
-						var data = eventTable.rows(indexes).data();
-						var event=data[0];
-						showEvent(event,indexes[0]);
-
-						// do something with the ID of the selected items
-					}
-				});
-				$(document).ready(function() {
-					$('#showData').on('click', function(e) {
-						e.preventDefault();
-						showData();
-
-					});
-					$('#menuNewEvent').on('click', function(e) {
-						e.preventDefault();
-						showData();
-						showNewEvent();
-
-					})
-					$('#menuNewActivity').on('click', function(e) {
-						e.preventDefault();
-						showData();
-						showNewActivity();
-
-					})
-					$('#btnSaveEvent').on('click', function(e) {
-						saveEvent();
-
-
-					});
-					$('#btnSaveActivity').on('click', function(e) {
-						saveActivity();
-
-
-					});
-					$('#btnHideData').on('click', function(e) {
-						hideData();
-
-
-					});
-					$('#menuSaveAsImage').on('click', function(e) {
-						saveAsPng();
-					});
-
-				});
-
-				function showData() {
-					$('#datapanel').removeClass('hidden');
-				}
-
-				function hideData() {
-					$('#datapanel').addClass('hidden');
-
-				}
-
-				function saveActivity() {
-					var name = $('#activityName').val();
-					var startdate = $('#activityStartDate').val();
-					var enddate = $('#activityEndDate').val();
-					var startDateID = moment(startdate).dayOfYear();
-					var endDateID = moment(enddate).dayOfYear();
-					var ev = {
-						name: name,
-						startDateID: startDateID,
-						endDateID: endDateID,
-						level: parseInt($('#level').val())
-					};
-					activityData.push(ev);
-					renderData(activityData, eventData);
-					activityTable.row.add(ev).draw();
-					saveToLocalStorage();
-				}
-
-				function saveEvent() {
-					var name = $('#eventName').val();
-					var edate = $('#eventDate').val();
-					var index=$('#eventN').val();
-					
-					var startDateID = moment(edate).dayOfYear();
-					var ev = {
-						name: name,
-						startDateID: startDateID
-					};
-					let iindex=parseInt(index);
-					if(isNaN(iindex)){
-						eventData.push(ev);
-						eventTable.row.add(ev).draw();
-					}
-					else
-						{
-							eventData[iindex]={name:name,startDateID:startDateID};
-							eventTable.row(iindex).data({name:name,startDateID:startDateID});
-						}
-					renderData(activityData, eventData);
-					eventTable.draw();
-					saveToLocalStorage();
-				}
-
-				function saveToLocalStorage() {
-					localStorage.setItem('wheel-' + wheelName, JSON.stringify({
-						name: wheelName,
-						activityData: activityData,
-						eventData: eventData
-					}));
-				}
-				
-				function dateIdToHtmlDate(dateid){
-					return moment().startOf('year').add(dateid,'days').format('YYYY-MM-DD')
-				}
-				function showEvent(event,index){
-					$('#eventForm').removeClass('hidden');
-					$('#eventN').val(index);
-					$('#eventName').val(event.name);
-					$('#eventDate').val(dateIdToHtmlDate(event.startDateID));
-				}
-				function showNewEvent() {
-					$('#eventForm').removeClass('hidden');
-					$('#eventN').val("");
-					$('#eventName').val("New Event");
-
-				}
-
-				function showNewActivity() {
-					$('#activityForm').removeClass('hidden');
-					$('#activityN').val("");
-					$('#activityName').val("New Event");
-
-				}
-
-				function saveAsPng() {
-					var tempstyle = $('#thewheel').attr('style');
-					$('#thewheel').attr('style', '');
-					saveSvgAsPng(document.getElementById('thewheel'), 'wheel.png');
-					$('#thewheel').attr('style', tempstyle);
-				}
+			<script src="scripts/wheeldata.js" >
+			
 			</script>
 </body>
 

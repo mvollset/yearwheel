@@ -31,18 +31,15 @@
     checkDone();
     for (var i = 0; i < images.length; i++) {
       (function(image) {
-        var href = image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
-        if (href) {
-          if (isExternal(href.value)) {
-            console.warn("Cannot render embedded images linking to external hosts: "+href.value);
-            return;
-          }
-        }
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         var img = new Image();
         img.crossOrigin="anonymous";
+        var href = image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
         href = href || image.getAttribute('href');
+        if (isExternal(href)) {
+          href += (href.indexOf('?') === -1 ? '?' : '&') + 't=' + (new Date().valueOf());
+        }
         if (href) {
           img.src = href;
           img.onload = function() {
@@ -69,9 +66,14 @@
   function styles(el, options, cssLoadedCallback) {
     var selectorRemap = options.selectorRemap;
     var modifyStyle = options.modifyStyle;
+    var modifyCss = options.modifyCss || function(selector, properties) {
+      var selector = selectorRemap ? selectorRemap(selector) : selector;
+      var cssText = modifyStyle ? modifyStyle(properties) : properties;
+      return selector + " { " + cssText + " }\n";
+    };
     var css = "";
-    // each font that has extranl link is saved into queue, and processed
-    // asynchronously
+
+    // Each font that has an external link is saved into queue, and processed asynchronously.
     var fontsQueue = [];
     var sheets = document.styleSheets;
     for (var i = 0; i < sheets.length; i++) {
@@ -96,16 +98,17 @@
 
             try {
               if (selectorText) {
-                match = el.querySelector(selectorText);
+                if(selectorText==":root")
+                    match=true;
+                else    
+                  match = el.querySelector(selectorText) || (el.parentNode && el.parentNode.querySelector(selectorText));
               }
             } catch(err) {
               console.warn('Invalid CSS selector "' + selectorText + '"', err);
             }
 
             if (match) {
-              var selector = selectorRemap ? selectorRemap(rule.selectorText) : rule.selectorText;
-              var cssText = modifyStyle ? modifyStyle(rule.style.cssText) : rule.style.cssText;
-              css += selector + " { " + cssText + " }\n";
+              css += modifyCss(rule.selectorText, rule.style.cssText);
             } else if(rule.cssText.match(/^@font-face/)) {
               // below we are trying to find matches to external link. E.g.
               // @font-face {
@@ -125,8 +128,21 @@
                 externalFontUrl = '';
               }
 
+              if (externalFontUrl === 'about:blank') {
+                // no point trying to load this
+                externalFontUrl = '';
+              }
+
               if (externalFontUrl) {
                 // okay, we are lucky. We can fetch this font later
+
+                //handle url if relative
+                if (externalFontUrl.startsWith('../')) {
+                  externalFontUrl = sheets[i].href + '/../' + externalFontUrl
+                } else if (externalFontUrl.startsWith('./')) {
+                  externalFontUrl = sheets[i].href + '/.' + externalFontUrl
+                }
+
                 fontsQueue.push({
                   text: rule.cssText,
                   // Pass url regex, so that once font is downladed, we can run `replace()` on it
@@ -203,7 +219,7 @@
           console.warn('Failed to load font from: ' + font.url);
           console.warn(e)
           css += font.text + '\n';
-          processFontQueue();
+          processFontQueue(queue);
         }
 
         function updateFontStyle(font, fontInBase64) {
@@ -358,6 +374,15 @@
       canvas.width = w;
       canvas.height = h;
 
+      var pixelRatio = window.devicePixelRatio || 1;
+
+      canvas.style.width = canvas.width+'px';
+      canvas.style.height = canvas.height+'px';
+      canvas.width *= pixelRatio;
+      canvas.height *= pixelRatio;
+
+      context.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+
       if(options.canvg) {
         options.canvg(canvas, src);
       } else {
@@ -412,12 +437,23 @@
       navigator.msSaveOrOpenBlob(uriToBlob(uri), name);
     } else {
       var saveLink = document.createElement('a');
-      var downloadSupported = 'download' in saveLink;
-      if (downloadSupported) {
+      if ('download' in saveLink) {
         saveLink.download = name;
-        saveLink.href = uri;
         saveLink.style.display = 'none';
         document.body.appendChild(saveLink);
+        try {
+          var blob = uriToBlob(uri);
+          var url = URL.createObjectURL(blob);
+          saveLink.href = url;
+          saveLink.onclick = function() {
+            requestAnimationFrame(function() {
+              URL.revokeObjectURL(url);
+            })
+          };
+        } catch (e) {
+          console.warn('This browser does not support object URLs. Falling back to string URL.');
+          saveLink.href = uri;
+        }
         saveLink.click();
         document.body.removeChild(saveLink);
       }

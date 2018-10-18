@@ -47,7 +47,17 @@
 			startDateID: 334,
 			endDateID: 364
 		}];
-
+		const curyear = new Date().getFullYear();
+		const moment0 = moment(curyear + "-01-01"); //1. of Janary this year
+		function toThisYearsDate(dateId){
+			let mom = moment(moment0);
+			mom.add(dateId,'days');
+			return mom;
+		}
+		function formatDate(dateid){
+			let dd = toThisYearsDate(dateid);
+			return moment(dd).format("DD.MM");
+		}
 		////////////////////////////////////////////////////////////
 		//////////////////////// Set-up ////////////////////////////
 		////////////////////////////////////////////////////////////
@@ -83,8 +93,8 @@
 			.attr("style", "margin-left:" + xoffset + "px;")
 			.append("g").attr("class", "wrapper")
 			.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
-			//Add a circular path to animate days....
-	
+		//Add a circular path to animate days....
+
 		////////////////////////////////////////////////////////////
 		//////////////////// Scales & Data /////////////////////////
 		////////////////////////////////////////////////////////////
@@ -137,7 +147,7 @@
 					.attr("d", newArc)
 					.style("fill", "none");
 			});
-		
+
 		//Append the month names within the arcs
 		svg.selectAll(".monthText")
 			.data(monthData)
@@ -154,11 +164,17 @@
 			.text(function(d) {
 				return d.month.toUpperCase();
 			});
-		var eventKeyfn=function(d){
-			if(!d)
+		var eventKeyfn = function(d) {
+			if (!d)
 				return null;
 			return d.startDateID;
 		}
+		var activityKeyfn = function(d) {
+			if (!d)
+				return null;
+			return d.name + "@" + d.startDateID.toString();
+		}
+
 		function renderData(activities, events) {
 
 			//Handles the mo
@@ -176,7 +192,7 @@
 					return d.endDateID * gtoradians
 				});
 			var acts = svg.selectAll('.activities')
-				.data(activityData)
+				.data(activityData, activityKeyfn);
 			acts.exit().remove();
 			var g = acts.enter().append("g").attr("class", "activities");
 			g.append("path")
@@ -218,7 +234,7 @@
 				});
 
 			var events = svg.selectAll('.circle')
-				.data(eventData,eventKeyfn);
+				.data(eventData, eventKeyfn);
 			events.exit().remove();
 			var g = events.enter().append("g").attr("class", 'circle');
 
@@ -240,6 +256,7 @@
 						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
 				})
 				.attr("class", "link");
+			
 			g.append("text")
 				.attr("x", function(d) {
 					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
@@ -251,52 +268,69 @@
 					return d.startDateID > 180 ? "end" : "start"
 				})
 				.text(function(d) {
-					return d.name
+					/*d3.select("body").append('div')
+					.attr('pointer-events', 'none')
+                    .attr("class", "toolxtip")
+                    //.style("opacity", 1)
+                    .html( "<b>" + d.name + "<b/")
+                    .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
+                    .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));*/
+    
+					return formatDate(d.startDateID) + " " +d.name;
 				});
 
-}
-			//Function for generating a circular path
-			function circleGen() {
-				//set defaults
-				var r = function(d) {
-						return d.radius;
-					},
-					x = function(d) {
-						return d.x;
-					},
-					y = function(d) {
-						return d.y;
-					};
-
-				//returned function to generate circle path
-				function circle(d) {
-					var cx = d3.functor(x).call(this, d),
-						cy = d3.functor(y).call(this, d),
-						myr = d3.functor(r).call(this, d);
-
-					return "M" + cx + "," + cy + " " +
-						"m" + -myr + ", 0 " +
-						"a" + myr + "," + myr + " 0 1,0 " + myr * 2 + ",0 " +
-						"a" + myr + "," + myr + " 0 1,0 " + -myr * 2 + ",0Z";
-				}
-
-				//getter-setter methods
-				circle.r = function(value) {
-					if (!arguments.length) return r;
-					r = value;
-					return circle;
-				};
-				circle.x = function(value) {
-					if (!arguments.length) return x;
-					x = value;
-					return circle;
-				};
-				circle.y = function(value) {
-					if (!arguments.length) return y;
-					y = value;
-					return circle;
+		}
+		//Function for generating a circular path
+		function circleGen() {
+			//set defaults
+			var r = function(d) {
+					return d.radius;
+				},
+				x = function(d) {
+					return d.x;
+				},
+				y = function(d) {
+					return d.y;
 				};
 
-				return circle;
+			//returned function to generate circle path
+			function circle(d) {
+				var cx = d3.functor(x).call(this, d),
+					cy = d3.functor(y).call(this, d),
+					myr = d3.functor(r).call(this, d);
+
+				return "M" + cx + "," + cy + " " +
+					"m" + -myr + ", 0 " +
+					"a" + myr + "," + myr + " 0 1,0 " + myr * 2 + ",0 " +
+					"a" + myr + "," + myr + " 0 1,0 " + -myr * 2 + ",0Z";
 			}
-		
+
+			//getter-setter methods
+			circle.r = function(value) {
+				if (!arguments.length) return r;
+				r = value;
+				return circle;
+			};
+			circle.x = function(value) {
+				if (!arguments.length) return x;
+				x = value;
+				return circle;
+			};
+			circle.y = function(value) {
+				if (!arguments.length) return y;
+				y = value;
+				return circle;
+			};
+
+			return circle;
+		}
+		function addPersonalTouch(){
+			 var head = document.head;
+			  var link = document.createElement("link");
+			
+			  link.type = "text/css";
+			  link.rel = "stylesheet";
+			  link.href = '/css/personal.css';
+			
+			  head.appendChild(link);
+		}

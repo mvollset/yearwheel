@@ -1,0 +1,111 @@
+:root{
+		--monthTextColor:#fff
+			
+		}
+		:root{
+			--level1Color:#28823a
+			
+		}
+		:root{
+			--level0Color:#28823a
+			
+		}
+		:root{
+			--activityTextColor:#bada55
+		}
+		:root {
+			--fontFamily: 'Roboto', Myriad, 'Roboto', sans-serif;
+		}
+	body {
+			font-family: var(--fontFamily);
+			font-weight: thin;
+		}
+		
+		#datapanel {
+			position: absolute;
+			display: block;
+			z-index: 1000;
+			top: 200px;
+			left: 200px;
+			opacity: .95;
+		}
+		
+		.monthArc {
+			fill: #e3e4e5;
+			stroke: #fff;
+		}
+		
+		.monthText {
+			stroke: var(--monthTextColor);
+			font-family: var(--fontFamily);
+			fill: var(--monthTextColor);
+		}
+		
+		.arcer {
+			stroke-weight: 0.1;
+			fill: #4259f4;
+		}
+		
+		.level1 {
+			fill:var(--level1Color);
+			cursor: pointer;
+		}
+		.level0 {
+			fill:var(--level0Color);
+			cursor: pointer;
+		}
+		
+		.link {
+			fill: "none";
+			stroke: #000;
+			stroke-width: 1.5px;
+		}
+		
+		.activityText {
+		    font-family: var(--fontFamily);
+			stroke: var(--activityTextColor);
+			fill: var(--activityTextColor);
+		}
+		div.toolxtip {
+		        position: absolute;
+		        text-align: left;
+		        width: 100px;
+		        height: 80px;
+		        padding: 8px;
+		        font: 10px sans-serif;
+		        background: #ddd;
+		        border: solid 1px #aaa;
+		        border-radius: 8px;
+		        pointer-events: none;
+    	}
+		.jumbotron {
+			background-color: #fff;
+		}
+		
+		.btn-circle {
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			padding: 6px 0;
+			font-size: 12px;
+			line-height: 1.428571429;
+			border-radius: 15px;
+		}
+		
+		.btn-circle.btn-lg {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+		}
+		
+		.btn-circle.btn-xl {
+			width: 70px;
+			height: 70px;
+			padding: 10px 16px;
+			font-size: 24px;
+			line-height: 1.33;
+			border-radius: 35px;
+		}

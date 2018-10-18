@@ -1,0 +1,14 @@
+		body {
+			font-family: 'MySopraFontRegular';
+			font-weight: thin;
+		}
+	:root{
+		--monthTextColor:#ef7d00
+			
+		}
+		:root{
+			--level1Color:#CF022B
+		}
+		:root{
+			--fontFamily:'MySopraFontRegular'
+		}
