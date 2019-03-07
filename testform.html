@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Årshjul</title>
+    <!--<link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />-->
+    <link href="/css/roboto.css" rel="stylesheet" />
+    <link href="/css/sopra.css" rel="stylesheet" />
+    <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/mystyle.css" rel="stylesheet" />
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light fixed-top bg-light flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="padding:48px">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">Hendelser</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Nytt årshjul</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny hendelse</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny periode</button>
+                        </li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Utseende</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          </a>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--monthTextColor', this.value);"></input>
+                            <span>Månedstekst</span>
+                        </li>
+                        <li class="nav-item">
+                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--level0Color', this.value);"></input>
+                            <span>Nivå 1 </span>
+                        </li>
+                        <li class="nav-item">
+                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--level1Color', this.value);"></input>
+                            <span>Nivå 2 </span>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Add some style</button>
+                        </li>
+                    </ul>
+
+
+                </div>
+
+            </nav>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Kalender</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div id="chart" style="padding:48px">
+                    <div id="app">
+                        <label for="name">Name:</label>
+                        <input id="name" class="form-control" type="text" v-model="name" />
+                        <!--v-model is doing the magic here-->
+                        <p>{{ name }}</p>
+                        <div v-for="activity in items">
+                           <div class="row">
+                                <div class="form-group">
+                                   <label>Name</label>
+                                   <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Level</label>
+                                    <level-editor
+                                     v-bind:level="activity.level">
+                                    </level-editor>
+                                </div>
+                                <div class="form-group">
+                                    <label>Start date</label>
+                                    <vuejs-datepicker v-model="activity.startDate" input-class="form-control"></vuejs-datepicker>
+                                </div>
+                                <div class="form-group">
+                                    <label>End date</label>
+                                    <vuejs-datepicker v-model="activity.endDate" input-class="form-control"></vuejs-datepicker>
+                                </div>
+                           </div>    
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    </div>
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script type="text/javascript">
+        var activityData=  [{
+					name: "Aktivitet X",
+					startDateID: 0,
+					endDateID: 119,
+					level: 0
+				}, {
+					name: "Aktivitet Y",
+					startDateID: 119,
+					endDateID: 153,
+					level: 0
+				},
+				 {
+					name: "Aktivitet Z",
+					startDateID: 153,
+					endDateID: 170,
+					level: 0
+				}
+				, {
+					name: "Ekstra moro",
+					startDateID: 0,
+					endDateID: 58,
+					level: 1
+				}, {
+					name: "Sommerferie",
+					startDateID: 150,
+					endDateID: 256,
+					level: 1
+				}];
+			var	eventData = [{
+						name: "Connect",
+						startDateID: 311
+					}, {
+						name: "ServiceNow release",
+						startDateID: 35
+					}
+
+				];
+		function dateIdToJsDate(dateid){
+					return moment().utc().startOf('year').add(dateid,'days').toDate();
+				}
+		let dataItems=[];
+		function parseData(dataArray){
+		    for(let i = 0;i<dataArray.length;i++){
+		        let res = {
+		            name:dataArray[i].name,
+		            startDate:dateIdToJsDate(dataArray[i].startDateID),
+		            endDate:dateIdToJsDate(dataArray[i].endDateID),
+		            level:dataArray[i].level,
+		        }
+		        dataItems.push(res);
+		    }
+		    dataItems.sort(function(a,b){
+		        return a.startDateID-b.startDateID
+		    });
+		}
+		parseData(activityData.concat(eventData));
+		Vue.component('level-editor',{
+		   props:['level'],
+		   template:'<div><div class="form-check form-check-inline csslevel0"><input class="form-check-input" type="radio"  value="0" v-model="level"><label class="form-check-label">Level 1</label></div><div class="form-check form-check-inline csslevel1"><input class="form-check-input" type="radio"  value="1" v-model="level"><label class="form-check-label">Level 2</label></div></div>'
+		});
+        new Vue({
+        el: '#app', 
+            components: {
+      	        vuejsDatepicker
+        },
+        data: { name: 'dfgdfg',
+                items:dataItems
+        } 
+            
+        });
+    </script>
+</body>
+
+</html>

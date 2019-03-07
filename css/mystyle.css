@@ -1,21 +1,11 @@
 :root{
-		--monthTextColor:#fff
+		--monthTextColor:#fff;
+		--level0Color:#28823a;
+		--level1Color:#CF022B;
+		--fontFamily: 'Roboto', Myriad, 'Roboto', sans-serif;
 			
 		}
-		:root{
-			--level1Color:#28823a
-			
-		}
-		:root{
-			--level0Color:#28823a
-			
-		}
-		:root{
-			--activityTextColor:#bada55
-		}
-		:root {
-			--fontFamily: 'Roboto', Myriad, 'Roboto', sans-serif;
-		}
+		
 	body {
 			font-family: var(--fontFamily);
 			font-weight: thin;
@@ -54,7 +44,12 @@
 			fill:var(--level0Color);
 			cursor: pointer;
 		}
-		
+		.csslevel1 {
+			background-color: var(--level1Color);
+		}
+		.csslevel0 {
+			background-color: var(--level0Color);
+		}
 		.link {
 			fill: "none";
 			stroke: #000;
@@ -69,14 +64,15 @@
 		div.toolxtip {
 		        position: absolute;
 		        text-align: left;
-		        width: 100px;
-		        height: 80px;
+		        width: 429px;
+		        height: 429px;
 		        padding: 8px;
 		        font: 10px sans-serif;
 		        background: #ddd;
 		        border: solid 1px #aaa;
 		        border-radius: 8px;
 		        pointer-events: none;
+		        z-index: 100;
     	}
 		.jumbotron {
 			background-color: #fff;
