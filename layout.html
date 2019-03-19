@@ -114,7 +114,7 @@
                                         <div class="col-sm">
                                             <div class="form-group">
                                                 <label>Level</label>
-                                                <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=val;}">
+                                                <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=parseInt(val);}">
                                                 </level-editor>
                                             </div>
                                         </div>
@@ -207,79 +207,11 @@
         }
         parseData(activityData.concat(eventData));
 
-        Vue.component('level-editor', {
-            model:{
-              prop:'picked',
-              event:'change'
-            },
-            props: ['level'],
-            template: `<div><div class="form-check form-check-inline csslevel0"><input class="form-check-input" type="radio"  
-            v-model="picked" 
-            v-on:change="$emit('change', $event.target.intLevel)"
-            value="0"><label class="form-check-label">Level 1</label></div>
-            <div class="form-check form-check-inline csslevel1">
-            <input class="form-check-input" type="radio"  v-model="picked" 
-            v-on:change="$emit('change', $event.target.intLevel)"
-            value="1" ><label class="form-check-label">Level 2</label></div></div>`,
-            data:function(){
-                return {
-                    picked:this.level
-                }
-            },
-            computed: {
-                intLevel: function () {
-                    return parseInt(this.picked);
-                }
-            }
-        });
-        new Vue({
-            el: '#app',
-            components: {
-                vuejsDatepicker
-
-            },
-            data: function() {
-
-                return {
-                    name: 'dfgdfg',
-                    items: dataItems
-
-                };
-
-            },
-            methods: {
-                onOk() {
-                    console.log('ok')
-                },
-                onCancel() {
-                    console.log('cancel')
-                },
-                updateWheel() {
-                    const activityData = [];
-                    const eventData = [];
-                    for (let i = 0; i < dataItems.length; i++) {
-                        let item = dataItems[i];
-                        let res = {
-                            name: item.name,
-                            level: item.level
-                        }
-                        if (item.startDate) {
-                            res.startDateID = moment(item.startDate).dayOfYear() - 1;
-                        }
-                        if (item.level!==undefined) {
-                            res.endDateID = moment(item.endDate).dayOfYear() - 1;
-                            activityData.push(res);
-                        }
-                        else {
-                            eventData.push(res);
-                        }
-
-                    }
-                    renderData(activityData, eventData);
-                }
-            }
-        });
+       
+       
     </script>
+    <script src="scripts/vue/levelEditor.js"></script>
+    <script src="scripts/vue/App.js"></script>
 </body>
 
 </html>
