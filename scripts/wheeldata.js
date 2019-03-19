@@ -77,7 +77,7 @@
 					}
 					return data;
 				}
-				var activityTable = $('#tblActivities').DataTable({
+					/*var activityTable = $('#tblActivities').DataTable({
 					data: activityData,
 					select: true,
 					order: [
@@ -99,7 +99,7 @@
 						data: "level"
 					}]
 				});
-				var eventTable = $('#tblEvents').DataTable({
+			var eventTable = $('#tblEvents').DataTable({
 					data: eventData,
 					select: true,
 					order: [
@@ -260,7 +260,7 @@
 					$('#activityN').val("");
 					$('#activityName').val("New Event");
 
-				}
+				}*/
 
 				function saveAsPng() {
 					var tempstyle = $('#thewheel').attr('style');

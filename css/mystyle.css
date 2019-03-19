@@ -1,8 +1,10 @@
 :root{
 		--monthTextColor:#fff;
+		--monthArc:#e3e4e5;
 		--level0Color:#28823a;
 		--level1Color:#CF022B;
 		--fontFamily: 'Roboto', Myriad, 'Roboto', sans-serif;
+		--activityTextColor:#000000
 			
 		}
 		
@@ -21,7 +23,7 @@
 		}
 		
 		.monthArc {
-			fill: #e3e4e5;
+			fill: var(--monthArc);
 			stroke: #fff;
 		}
 		
@@ -104,4 +106,9 @@
 			font-size: 24px;
 			line-height: 1.33;
 			border-radius: 35px;
+		}
+		
+		.modal-dialog {
+		    max-width: 900px;
+		    margin: 1.75rem auto;
 		}

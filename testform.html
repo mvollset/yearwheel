@@ -9,6 +9,8 @@
     <link href="/css/roboto.css" rel="stylesheet" />
     <link href="/css/sopra.css" rel="stylesheet" />
     <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <link href="/css/mystyle.css" rel="stylesheet" />
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js" crossorigin="anonymous"></script>
@@ -50,21 +52,31 @@
           </a>
                     </h6>
                     <ul class="nav flex-column">
+                        <div id="styleapp">
                         <li class="nav-item">
-                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--monthTextColor', this.value);"></input>
                             <span>Månedstekst</span>
+                             <css-color-shifter
+                            css-property="--monthTextColor"
+                             ></css-color-shifter>
                         </li>
                         <li class="nav-item">
-                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--level0Color', this.value);"></input>
                             <span>Nivå 1 </span>
+                             <css-color-shifter
+                            css-property="--level0Color"
+                             ></css-color-shifter>
                         </li>
                         <li class="nav-item">
-                            <input type="color" value="#fff" onchange="document.documentElement.style.setProperty('--level1Color', this.value);"></input>
                             <span>Nivå 2 </span>
+                            <css-color-shifter
+                            css-property="--level1Color"
+                             ></css-color-shifter>
                         </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Add some style</button>
+                        <li>
+                            <font-shifter>
+                                
+                            </font-shifter>
                         </li>
+                        </div>
                     </ul>
 
 
@@ -104,18 +116,18 @@
                                    <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name"/>
                                 </div>
                                 <div class="form-group">
-                                    <label>Level</label>
-                                    <level-editor
-                                     v-bind:level="activity.level">
-                                    </level-editor>
-                                </div>
-                                <div class="form-group">
                                     <label>Start date</label>
                                     <vuejs-datepicker v-model="activity.startDate" input-class="form-control"></vuejs-datepicker>
                                 </div>
                                 <div class="form-group">
                                     <label>End date</label>
                                     <vuejs-datepicker v-model="activity.endDate" input-class="form-control"></vuejs-datepicker>
+                                </div>
+                                <div class="form-group">
+                                    <label>Level</label>
+                                    <level-editor
+                                     v-bind:level="activity.level">
+                                    </level-editor>
                                 </div>
                            </div>    
                         </div>
@@ -129,6 +141,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="/scripts/dist/vue-color.js"></script>
     <script type="text/javascript">
         var activityData=  [{
 					name: "Aktivitet X",
@@ -186,6 +199,7 @@
 		    });
 		}
 		parseData(activityData.concat(eventData));
+	
 		Vue.component('level-editor',{
 		   props:['level'],
 		   template:'<div><div class="form-check form-check-inline csslevel0"><input class="form-check-input" type="radio"  value="0" v-model="level"><label class="form-check-label">Level 1</label></div><div class="form-check form-check-inline csslevel1"><input class="form-check-input" type="radio"  value="1" v-model="level"><label class="form-check-label">Level 2</label></div></div>'
@@ -194,13 +208,22 @@
         el: '#app', 
             components: {
       	        vuejsDatepicker
+      	        
         },
-        data: { name: 'dfgdfg',
+        data: function(){
+            
+            return   { 
+                name: 'dfgdfg',
                 items:dataItems
-        } 
+                
+            };
+            
+        }
             
         });
+       
     </script>
+    <script src="/scripts/vue/styleapp.js"></script>
 </body>
 
 </html>

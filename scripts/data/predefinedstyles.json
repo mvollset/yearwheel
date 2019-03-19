@@ -1,0 +1,26 @@
+{
+    "styles" : [
+    {
+        "name":"Sopra",
+        "properties":{
+            "monthTextColor": "#000000",
+            "fontFamily": "MySopraFontRegular",
+            "level0Color": "#E45E2A",
+            "level1Color": "#01738B",
+            "monthArc": "#D0122D",
+            "activityTextColor": "#000000"
+        }
+    },
+     {
+        "name":"Material Purple",
+        "properties":{
+    "monthTextColor": "#000000",
+    "fontFamily": "\"Roboto\", Myriad, \"Roboto\", sans-serif",
+    "level0Color": "#6200EE",
+    "level1Color": "#3700B3",
+    "monthArc": "#03DAC5",
+    "activityTextColor": "#FFFFFF"
+}
+    }
+    ]
+}
