@@ -167,12 +167,12 @@
 		var eventKeyfn = function(d) {
 			if (!d)
 				return null;
-			return d.startDateID;
+			return `${d.name}@${d.startDateID}`;
 		}
 		var activityKeyfn = function(d) {
 			if (!d)
 				return null;
-			return d.name + "@" + d.startDateID.toString();
+			return `${d.name}@${d.startDateID}`;
 		}
 
 		function renderData(activities, events) {
@@ -335,11 +335,8 @@
 				var cx = d3.functor(x).call(this, d),
 					cy = d3.functor(y).call(this, d),
 					myr = d3.functor(r).call(this, d);
-
-				return "M" + cx + "," + cy + " " +
-					"m" + -myr + ", 0 " +
-					"a" + myr + "," + myr + " 0 1,0 " + myr * 2 + ",0 " +
-					"a" + myr + "," + myr + " 0 1,0 " + -myr * 2 + ",0Z";
+				
+				return `M${cx},${cy} m${-myr}, 0 a${myr},${myr} 0 1,0 ${myr*2},0 a${myr},${myr} 0 1,0 ${-myr*2},0Z`;
 			}
 
 			//getter-setter methods
