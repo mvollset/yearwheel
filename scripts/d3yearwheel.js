@@ -61,47 +61,84 @@
 		////////////////////////////////////////////////////////////
 		//////////////////////// Set-up ////////////////////////////
 		////////////////////////////////////////////////////////////
+		let svg,radix;
+		let gtoradians = Math.PI / 180;
+		//Function for generating a circular path
+		function circleGen() {
+			//set defaults
+			var r = function(d) {
+					return d.radius;
+				},
+				x = function(d) {
+					return d.x;
+				},
+				y = function(d) {
+					return d.y;
+				};
 
-		var screenWidth = Math.min(window.innerWidth, window.innerHeight);
-		var xoffset = 0;
-		if (window.innerWidth > window.innerHeight) {
-			xoffset = (window.innerWidth - window.innerHeight) / 2;
+			//returned function to generate circle path
+			function circle(d) {
+				var cx = d3.functor(x).call(this, d),
+					cy = d3.functor(y).call(this, d),
+					myr = d3.functor(r).call(this, d);
+				
+				return `M${cx},${cy} m${-myr}, 0 a${myr},${myr} 0 1,0 ${myr*2},0 a${myr},${myr} 0 1,0 ${-myr*2},0Z`;
+			}
+
+			//getter-setter methods
+			circle.r = function(value) {
+				if (!arguments.length) return r;
+				r = value;
+				return circle;
+			};
+			circle.x = function(value) {
+				if (!arguments.length) return x;
+				x = value;
+				return circle;
+			};
+			circle.y = function(value) {
+				if (!arguments.length) return y;
+				y = value;
+				return circle;
+			};
+
+			return circle;
 		}
-		var gtoradians = Math.PI / 180;
-		var margin = {
-				left: 30,
-				top: 30,
-				right: 30,
-				bottom: 30
-			},
-			width = Math.min(screenWidth) - margin.left - margin.right,
-			height = Math.min(screenWidth) - margin.top - margin.bottom;
-		var radix = width * 0.7 / 2;
-		var myC = circleGen()
-			.x(function(d) {
-				return 0;
-			})
-			.y(function(d) {
-				return 0;
-			})
-			.r(function(d) {
-				return radix + 15;
-			});
-		var svg = d3.select("#chart").append("svg").attr('id', "thewheel")
-			.attr("width", (width + margin.left + margin.right))
-			.attr("height", (height + margin.top + margin.bottom))
-			.attr("style", "margin-left:" + xoffset + "px;")
-			.append("g").attr("class", "wrapper")
-			.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
-		//Add a circular path to animate days....
-
-		////////////////////////////////////////////////////////////
-		//////////////////// Scales & Data /////////////////////////
-		////////////////////////////////////////////////////////////
-
-		//The start date number and end date number of the months in a year
-
-		//Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
+		function setUp(){
+				var screenWidth = Math.min(window.innerWidth, window.innerHeight);
+			var xoffset = 0;
+			if (window.innerWidth > window.innerHeight) {
+				xoffset = ((window.innerWidth - window.innerHeight) / 2)-320;
+			}
+			
+			var margin = {
+					left: 30,
+					top: 30,
+					right: 30,
+					bottom: 30
+				},
+				width = Math.min(screenWidth) - margin.left - margin.right,
+				height = Math.min(screenWidth) - margin.top - margin.bottom;
+			radix = width * 0.7 / 2;
+			var myC = circleGen()
+				.x(function(d) {
+					return 0;
+				})
+				.y(function(d) {
+					return 0;
+				})
+				.r(function(d) {
+					return radix + 15;
+				});
+			 svg = d3.select("#chart").append("svg").attr('id', "thewheel")
+				.attr("width", (width + margin.left + margin.right))
+				.attr("height", (height + margin.top + margin.bottom))
+				.attr("style", "margin-left:" + xoffset + "px;")
+				.append("g").attr("class", "wrapper")
+				.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
+		}
+		function drawMonths(){
+			//Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
 		//Months
 		var arc = d3.svg.arc()
 			.innerRadius(radix)
@@ -164,6 +201,18 @@
 			.text(function(d) {
 				return d.month.toUpperCase();
 			});
+		}
+		setUp();
+		drawMonths();
+		//Add a circular path to animate days....
+
+		////////////////////////////////////////////////////////////
+		//////////////////// Scales & Data /////////////////////////
+		////////////////////////////////////////////////////////////
+
+		//The start date number and end date number of the months in a year
+
+		
 		var eventKeyfn = function(d) {
 			if (!d)
 				return null;
@@ -317,47 +366,7 @@
 				});
 
 		}
-		//Function for generating a circular path
-		function circleGen() {
-			//set defaults
-			var r = function(d) {
-					return d.radius;
-				},
-				x = function(d) {
-					return d.x;
-				},
-				y = function(d) {
-					return d.y;
-				};
-
-			//returned function to generate circle path
-			function circle(d) {
-				var cx = d3.functor(x).call(this, d),
-					cy = d3.functor(y).call(this, d),
-					myr = d3.functor(r).call(this, d);
-				
-				return `M${cx},${cy} m${-myr}, 0 a${myr},${myr} 0 1,0 ${myr*2},0 a${myr},${myr} 0 1,0 ${-myr*2},0Z`;
-			}
-
-			//getter-setter methods
-			circle.r = function(value) {
-				if (!arguments.length) return r;
-				r = value;
-				return circle;
-			};
-			circle.x = function(value) {
-				if (!arguments.length) return x;
-				x = value;
-				return circle;
-			};
-			circle.y = function(value) {
-				if (!arguments.length) return y;
-				y = value;
-				return circle;
-			};
-
-			return circle;
-		}
+		
 		function addPersonalTouch(){
 			 var head = document.head;
 			  var link = document.createElement("link");
