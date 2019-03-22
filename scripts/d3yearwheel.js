@@ -127,19 +127,20 @@
 				.append("g").attr("class", "wrapper")
 				.attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
 		}
-		function createMonthTextPath(d,i){
-				//A regular expression that captures all in between the start of a string (denoted by ^) 
+		function createArc(d){
+			//A regular expression that captures all in between the start of a string (denoted by ^) 
 				//and the first capital letter L
 				var firstArcSection = /(^.+?)L/;
 
 				//The [1] gives back the expression between the () (thus not the L as well) 
 				//which is exactly the arc statement
-				var newArc = firstArcSection.exec(d3.select(this).attr("d"))[1];
+				var newArc = firstArcSection.exec(d3.select(d).attr("d"))[1];
 				//Replace all the comma's so that IE can handle it -_-
 				//The g after the / is a modifier that "find all matches rather than stopping after the first match"
-				newArc = newArc.replace(/,/g, " ");
-
-				//Create a new invisible arc that the text can flow along
+				return newArc.replace(/,/g, " ");
+		}
+		function createMonthTextPath(d,i){
+				const newArc = createArc(this);
 				svg.append("path")
 					.attr("class", "hiddenDonutArcs")
 					.attr("id", "donutArc" + i)
@@ -215,24 +216,15 @@
 				return null;
 			return `${d.name}@${d.startDateID}`;
 		}
+		
 		function doActivities(acts){
 			acts.attr("class", "activities").append("path")
 				.attr("class", function(d, i) {
 					return "arcer level" + d.level
 				})
 				.attr("d", activityArc).each(function(d, i) {
-					//A regular expression that captures all in between the start of a string (denoted by ^) 
-					//and the first capital letter L
-					var firstArcSection = /(^.+?)L/;
-
-					//The [1] gives back the expression between the () (thus not the L as well) 
-					//which is exactly the arc statement
-					var newArc = firstArcSection.exec(d3.select(this).attr("d"))[1];
-					//Replace all the comma's so that IE can handle it -_-
-					//The g after the / is a modifier that "find all matches rather than stopping after the first match"
-					newArc = newArc.replace(/,/g, " ");
-
-					//Create a new invisible arc that the text can flow along
+				
+					let newArc = createArc(this);
 					acts.append("path")
 						.attr("class", "hiddenDonutArcs")
 						.attr("id", "activityArc" + i)
