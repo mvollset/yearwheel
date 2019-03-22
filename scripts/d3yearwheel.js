@@ -1,53 +1,4 @@
-		var monthData = [{
-			month: "Januar",
-			startDateID: 0,
-			endDateID: 30
-		}, {
-			month: "Februar",
-			startDateID: 31,
-			endDateID: 58
-		}, {
-			month: "Mars",
-			startDateID: 59,
-			endDateID: 89
-		}, {
-			month: "April",
-			startDateID: 90,
-			endDateID: 119
-		}, {
-			month: "Mai",
-			startDateID: 120,
-			endDateID: 150
-		}, {
-			month: "Juni",
-			startDateID: 151,
-			endDateID: 180
-		}, {
-			month: "Juli",
-			startDateID: 181,
-			endDateID: 211
-		}, {
-			month: "August",
-			startDateID: 212,
-			endDateID: 242
-		}, {
-			month: "September",
-			startDateID: 243,
-			endDateID: 272
-		}, {
-			month: "Oktober",
-			startDateID: 273,
-			endDateID: 303
-		}, {
-			month: "November",
-			startDateID: 306,
-			endDateID: 333
-		}, {
-			month: "Desember",
-			startDateID: 334,
-			endDateID: 364
-		}];
-	
+		var monthData = getMonthData();
 		////////////////////////////////////////////////////////////
 		//////////////////////// Set-up ////////////////////////////
 		////////////////////////////////////////////////////////////
@@ -149,14 +100,20 @@
 			
 		}
 		function drawMonths(){
-			//Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
+			drawMonthArcs(svg);
+			addMonthText(svg);
+		
+	
+		}
+		function drawMonthArcs(svg){
+				//Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
 		//Months
-		var arc = d3.svg.arc()
+		let arc = d3.svg.arc()
 			.innerRadius(radix)
 			.outerRadius(radix + 30);
 
 		//Creates function that will turn the month data into start and end angles
-		var pie = d3.layout.pie()
+		let pie = d3.layout.pie()
 			.value(function(d) {
 				return d.endDateID - d.startDateID;
 			})
@@ -177,9 +134,10 @@
 			})
 			.attr("d", arc)
 			.each(createMonthTextPath);
-
-		//Append the month names within the arcs
-		svg.selectAll(".monthText")
+		}
+		function addMonthText(svg){
+			//Append the month names within the arcs
+			svg.selectAll(".monthText")
 			.data(monthData)
 			.enter().append("text")
 			.attr("class", "monthText")
@@ -273,13 +231,8 @@
 				.endAngle(function(d) {
 					return d.endDateID * gtoradians
 				});
-		function renderEvents(){
-			var events = svg.selectAll('.circle')
-				.data(eventData, eventKeyfn);
-			events.exit().remove();
-			var g = events.enter().append("g").attr("class", 'circle');
-
-			g.append("circle")
+		function drawEventCircles(events){
+				events.append("circle")
 				.attr("r", 10)
 				.style("fill", "#000")
 				.style("opacity", ".4")
@@ -289,16 +242,18 @@
 				.attr("cy", function(d) {
 					return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
 				})
-
-			g.append("path")
+		}
+		function drawEventPins(events){
+			events.append("path")
 				.attr("d", function(d) {
 					return "M " + ((radix) + 25) * Math.sin(d.startDateID * gtoradians) + " " +
 						-((radix) + 25) * Math.cos(d.startDateID * gtoradians) + " L " + ((radix) + 130) * Math.sin(d.startDateID * gtoradians) + " " +
 						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
 				})
 				.attr("class", "link");
-			
-			g.append("text")
+		}
+		function drawEventText(events){
+			events.append("text")
 				.attr("x", function(d) {
 					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
 				})
@@ -319,6 +274,20 @@
     
 					return formatDate(d.startDateID) + " " +d.name;
 				});
+		}
+		function doEvents(events){
+			drawEventCircles(events);			
+			drawEventPins(events);
+			drawEventText(events);
+		}
+		function renderEvents(eventData){
+			var events = svg.selectAll('.circle')
+				.data(eventData, eventKeyfn);
+			events.selectAll('*').remove();
+			doEvents(events);
+			events.exit().remove();
+			var g = events.enter().append("g").attr("class", 'circle');
+			doEvents(g);
 		}
 		function renderData(activities, events) {
 			renderActivities(activities);

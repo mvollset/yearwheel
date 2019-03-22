@@ -96,23 +96,22 @@
                                 <p>{{ name }}</p>
                                 <div v-for="activity in items">
                                     <div class="row">
-                                        <div class="col-sm">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Name</label>
                                                 <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name" />
                                             </div>
                                         </div>
-                                        <div class="col-sm">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Start date</label>
                                                 <vuejs-datepicker v-model="activity.startDate" input-class="form-control"></vuejs-datepicker>
-                                            </div>
-                                            <div class="form-group">
+                                            
                                                 <label>End date</label>
                                                 <vuejs-datepicker v-model="activity.endDate" input-class="form-control"></vuejs-datepicker>
                                             </div>
                                         </div>
-                                        <div class="col-sm">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Level</label>
                                                 <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=parseInt(val);}">
@@ -142,7 +141,8 @@
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src="/scripts/dist/vue-color.js"></script>
-    <script src="/scripts/dist/helpers.js"></script>
+    <script src="/scripts/helpers.js"></script>
+    <script src="/scripts/calendar.js"></script>
     <script src="scripts/savesvgaspng.js"></script>
     <script src="scripts/d3yearwheel.js"></script>
     <script src="scripts/wheeldata.js"></script>
