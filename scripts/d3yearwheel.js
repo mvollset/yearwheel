@@ -5,7 +5,7 @@
 		let svg,radix;
 		let gtoradians = Math.PI / 180;
 		//Function for generating a circular path
-		function circleGen() {
+		/*function circleGen() {
 			//set defaults
 			var r = function(d) {
 					return d.radius;
@@ -44,7 +44,7 @@
 			};
 
 			return circle;
-		}
+		}*/
 		function setUp(){
 			var screenWidth = Math.min(window.innerWidth, window.innerHeight);
 			var xoffset = 0;
@@ -61,7 +61,7 @@
 			width = Math.min(screenWidth) - margin.left - margin.right,
 			height = Math.min(screenWidth) - margin.top - margin.bottom;
 			radix = width * 0.7 / 2;
-			var myC = circleGen()
+			/*var myC = circleGen()
 				.x(function(d) {
 					return 0;
 				})
@@ -70,7 +70,7 @@
 				})
 				.r(function(d) {
 					return radix + 15;
-				});
+				});*/
 			 svg = d3.select("#chart").append("svg").attr('id', "thewheel")
 				.attr("width", (width + margin.left + margin.right))
 				.attr("height", (height + margin.top + margin.bottom))

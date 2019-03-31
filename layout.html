@@ -95,30 +95,7 @@
                                 <!--v-model is doing the magic here-->
                                 <p>{{ name }}</p>
                                 <div v-for="activity in items">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Name</label>
-                                                <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Start date</label>
-                                                <vuejs-datepicker v-model="activity.startDate" input-class="form-control"></vuejs-datepicker>
-                                            
-                                                <label>End date</label>
-                                                <vuejs-datepicker v-model="activity.endDate" input-class="form-control"></vuejs-datepicker>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Level</label>
-                                                <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=parseInt(val);}">
-                                                </level-editor>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   <activity-editor v-bind:activity="activity"></activity-editor>
                                 </div>
                         </div>
                         <div class="modal-footer">
@@ -213,6 +190,7 @@
        
     </script>
     <script src="scripts/vue/levelEditor.js"></script>
+    <script src="scripts/vue/activityEditor.js"></script>
     <script src="scripts/vue/App.js"></script>
 </body>
 
