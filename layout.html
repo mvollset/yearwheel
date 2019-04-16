@@ -180,15 +180,14 @@
                 }
                 dataItems.push(res);
             }
-            dataItems.sort(function(a, b) {
-                return a.startDateID - b.startDateID
-            });
+            dataItems.sort(sortItems);
         }
         parseData(activityData.concat(eventData));
 
        
        
     </script>
+    <script src="scripts/helpers.js"></script>
     <script src="scripts/vue/levelEditor.js"></script>
     <script src="scripts/vue/activityEditor.js"></script>
     <script src="scripts/vue/App.js"></script>
