@@ -23,16 +23,8 @@
                     const activityData = [];
                     const eventData = [];
                     for (let i = 0; i < dataItems.length; i++) {
-                        let item = dataItems[i];
-                        let res = {
-                            name: item.name,
-                            level: item.level
-                        }
-                        if (item.startDate) {
-                            res.startDateID = moment(item.startDate).dayOfYear() - 1;
-                        }
+                        let item = getItem(dataItems[i]);
                         if (item.level!==undefined) {
-                            res.endDateID = moment(item.endDate).dayOfYear() - 1;
                             activityData.push(res);
                         }
                         else {
@@ -41,6 +33,18 @@
 
                     }
                     renderData(activityData, eventData);
+                },
+                getItem(item){
+                    let res = {
+                        name: item.name,
+                        level: item.level,
+                        startDateID:item.startDate?moment(item.startDate).dayOfYear() - 1:null
+                    }
+                    if (item.level!==undefined) {
+                        res.endDateID = moment(item.endDate).dayOfYear() - 1;
+                       
+                    }
+                    return res;
                 }
             }
         });
