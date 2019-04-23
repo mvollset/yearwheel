@@ -247,7 +247,8 @@
 					return d.endDateID * gtoradians
 				});
 		function drawEventCircles(events){
-				events.append("circle")
+				drawPinMarkers(events,0);
+				/*events.append("circle")
 				.attr("r", 10)
 				.style("fill", "#000")
 				.style("opacity", ".4")
@@ -256,7 +257,7 @@
 				})
 				.attr("cy", function(d) {
 					return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
-				})
+				})*/
 		}
 		function drawEventPins(events){
 			events.append("path")
@@ -265,17 +266,17 @@
 				})
 				.attr("class", "link");
 		}
-		function drawActivityCircles(activities){
-			activities.append("circle")
-			.attr("r", 10)
-			.style("fill", "#000")
-			.style("opacity", ".4")
-			.attr("cx", function(d) {
-				return ((radix) + 15) * Math.sin(d.startDateID * gtoradians);
-			})
-			.attr("cy", function(d) {
-				return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
-			})
+		function drawPinMarkers(events,startOffset){
+			events.append("circle")
+				.attr("r", 10)
+				.style("fill", "#000")
+				.style("opacity", ".4")
+				.attr("cx", function(d) {
+					return ((radix) + 15 + startOffset) * Math.sin(d.startDateID * gtoradians);
+				})
+				.attr("cy", function(d) {
+					return -((radix) + 15 + startOffset) * Math.cos(d.startDateID * gtoradians);
+				})
 		}
 		function drawActivityPins(activities){
 			//Same as event pins, but move starting point based on level.
@@ -321,28 +322,6 @@
 			drawPinText(events,function(d){
 				return `${formatDate(d.startDateID)} - ${formatDate(d.startDateID)} ${d.name}`;
 			});
-			/*events.append("text")
-				.attr("x", function(d) {
-					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
-				})
-				.attr("y", function(d) {
-					return -((radix) + 135) * Math.cos(d.startDateID * gtoradians)
-				})
-				.style("text-anchor", function(d) {
-					//When we pass 180 turn the text;
-					return d.startDateID > 180 ? "end" : "start"
-				})
-				.text(function(d) {
-					/*d3.select("body").append('div')
-					.attr('pointer-events', 'none')
-                    .attr("class", "toolxtip")
-                    //.style("opacity", 1)
-                    .html( "<b>" + d.name + "<b/")
-                    .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
-                    .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));
-    
-					return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
-				});*/
 		}
 		function drawEventText(events){
 			drawPinText(events,function(d){
