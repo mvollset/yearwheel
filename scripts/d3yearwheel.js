@@ -293,7 +293,7 @@
 				const y2=-((radix) + 130) * Math.cos(startDateID * gtoradians);
 				return `M ${x1} ${y1} L ${x2} ${y2}`;
 		}
-		function drawActivityText(events){
+		function drawPinText(events,textfn){
 			events.append("text")
 				.attr("x", function(d) {
 					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
@@ -313,12 +313,15 @@
                     .html( "<b>" + d.name + "<b/")
                     .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
                     .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));*/
-    
-					return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
+					return textfn(d);
+					//return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
 				});
 		}
-		function drawEventText(events){
-			events.append("text")
+		function drawActivityText(events){
+			drawPinText(events,function(d){
+				return `${formatDate(d.startDateID)} - ${formatDate(d.startDateID)} ${d.name}`;
+			});
+			/*events.append("text")
 				.attr("x", function(d) {
 					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
 				})
@@ -326,6 +329,7 @@
 					return -((radix) + 135) * Math.cos(d.startDateID * gtoradians)
 				})
 				.style("text-anchor", function(d) {
+					//When we pass 180 turn the text;
 					return d.startDateID > 180 ? "end" : "start"
 				})
 				.text(function(d) {
@@ -335,10 +339,15 @@
                     //.style("opacity", 1)
                     .html( "<b>" + d.name + "<b/")
                     .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
-                    .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));*/
+                    .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));
     
-					return formatDate(d.startDateID) + " " +d.name;
-				});
+					return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
+				});*/
+		}
+		function drawEventText(events){
+			drawPinText(events,function(d){
+				return `${formatDate(d.startDateID)} ${d.name}`;
+			});
 		}
 		function doEvents(events){
 			drawEventCircles(events);			
