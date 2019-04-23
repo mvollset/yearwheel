@@ -256,6 +256,7 @@
 		function drawEventPins(events){
 			events.append("path")
 				.attr("d", function(d) {
+					return getPinSvg(25,d.startDateID);
 					return "M " + ((radix) + 25) * Math.sin(d.startDateID * gtoradians) + " " +
 						-((radix) + 25) * Math.cos(d.startDateID * gtoradians) + " L " + ((radix) + 130) * Math.sin(d.startDateID * gtoradians) + " " +
 						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
@@ -278,11 +279,17 @@
 			//Same as event pins, but move starting point based on level.
 			activities.append("path")
 				.attr("d", function(d) {
-					return "M " + (radix + (d.level * 30 + 60)) * Math.sin(d.startDateID * gtoradians) + " " +
-						-(radix + (d.level * 30 + 60)) * Math.cos(d.startDateID * gtoradians) + " L " + ((radix) + 130) * Math.sin(d.startDateID * gtoradians) + " " +
-						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
+					return getPinSvg(d.level * 30 + 60,d.startDateID);			
 				})
 				.attr("class", "link");
+				//
+		}
+		function getPinSvg(startOffset,startDateID){
+				const x1=(radix + (startOffset)) * Math.sin(startDateID * gtoradians);
+				const y1=-(radix + (startOffset)) * Math.cos(startDateID * gtoradians);
+				const x2=((radix) + 130) * Math.sin(startDateID * gtoradians);
+				const y2=-((radix) + 130) * Math.cos(startDateID * gtoradians);
+				return `M ${x1} ${y1} L ${x2} ${y2}`;
 		}
 		function drawActivityText(events){
 			events.append("text")
