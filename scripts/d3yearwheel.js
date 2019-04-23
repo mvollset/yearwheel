@@ -183,13 +183,15 @@
 				.attr("d", activityArc).each(function(d, i) {
 				
 					let newArc = createArc(this);
+					d._i=i;
 					acts.append("path")
 						.attr("class", "hiddenDonutArcs")
-						.attr("id", "activityArc" + i)
+						.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
 						.attr("d", newArc)
 						.style("fill", "none");
 				});
-				acts.append("text")
+				
+				acts.filter(function(d){return hasRoomForText(d)}).append("text")
 				.attr("class", "activityText")
 				//.attr("x", 14) //Move the text from the start angle of the arc
 				.attr("dy", 18) //Move the text down
@@ -197,11 +199,19 @@
 				.attr("startOffset", "50%")
 				.style("text-anchor", "middle")
 				.attr("xlink:href", function(d, i) {
-					return "#activityArc" + i;
+					return "#activityArc" + d._i; //Use reference on generated arc!
 				})
 				.text(function(d) {
 					return d.name.toUpperCase();
 				});
+				drawActivityPins(acts.filter(function(d){return !hasRoomForText(d)}));
+				//drawActivityCircles(acts.filter(function(d){return !hasRoomForText(d)}));
+				drawActivityText(acts.filter(function(d){return !hasRoomForText(d)}));
+		}
+		function hasRoomForText(activity){
+			let n = activity.name.length;
+			let d = activity.endDateID-activity.startDateID;
+			return (d>(n*3));
 		}
 		function renderActivities(activities){
 				//Get all existing activities
@@ -251,6 +261,51 @@
 						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
 				})
 				.attr("class", "link");
+		}
+		function drawActivityCircles(activities){
+			activities.append("circle")
+			.attr("r", 10)
+			.style("fill", "#000")
+			.style("opacity", ".4")
+			.attr("cx", function(d) {
+				return ((radix) + 15) * Math.sin(d.startDateID * gtoradians);
+			})
+			.attr("cy", function(d) {
+				return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
+			})
+		}
+		function drawActivityPins(activities){
+			//Same as event pins, but move starting point based on level.
+			activities.append("path")
+				.attr("d", function(d) {
+					return "M " + (radix + (d.level * 30 + 60)) * Math.sin(d.startDateID * gtoradians) + " " +
+						-(radix + (d.level * 30 + 60)) * Math.cos(d.startDateID * gtoradians) + " L " + ((radix) + 130) * Math.sin(d.startDateID * gtoradians) + " " +
+						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
+				})
+				.attr("class", "link");
+		}
+		function drawActivityText(events){
+			events.append("text")
+				.attr("x", function(d) {
+					return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
+				})
+				.attr("y", function(d) {
+					return -((radix) + 135) * Math.cos(d.startDateID * gtoradians)
+				})
+				.style("text-anchor", function(d) {
+					return d.startDateID > 180 ? "end" : "start"
+				})
+				.text(function(d) {
+					/*d3.select("body").append('div')
+					.attr('pointer-events', 'none')
+                    .attr("class", "toolxtip")
+                    //.style("opacity", 1)
+                    .html( "<b>" + d.name + "<b/")
+                    .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
+                    .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));*/
+    
+					return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
+				});
 		}
 		function drawEventText(events){
 			events.append("text")
