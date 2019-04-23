@@ -164,19 +164,41 @@
 		//The start date number and end date number of the months in a year
 
 		
-		var eventKeyfn = function(d) {
+		const eventKeyfn = function(d) {
+			return keyFn(d);
+		}
+		const activityKeyfn = function(d) {
+			return keyFn(d);
+		}
+		const keyFn = function(d){
 			if (!d)
 				return null;
 			return `${d.name}@${d.startDateID}`;
 		}
-		var activityKeyfn = function(d) {
-			if (!d)
-				return null;
-			return `${d.name}@${d.startDateID}`;
-		}
-		
 		function doActivities(acts){
-			acts.attr("class", "activities").append("path")
+
+				drawActivityArcs(acts);
+				drawInlineActivityText(acts.filter(function(d){return hasRoomForText(d)}));
+				drawActivityPins(acts.filter(function(d){return !hasRoomForText(d)}));
+				drawActivityText(acts.filter(function(d){return !hasRoomForText(d)}));
+		}
+		function drawInlineActivityText(activities){
+			activities.append("text")
+			.attr("class", "activityText")
+			//.attr("x", 14) //Move the text from the start angle of the arc
+			.attr("dy", 18) //Move the text down
+			.append("textPath")
+			.attr("startOffset", "50%")
+			.style("text-anchor", "middle")
+			.attr("xlink:href", function(d, i) {
+				return "#activityArc" + d._i; //Use reference on generated arc!
+			})
+			.text(function(d) {
+				return d.name.toUpperCase();
+			});
+		}
+		function drawActivityArcs(activities){
+			activities.attr("class", "activities").append("path")
 				.attr("class", function(d, i) {
 					return "arcer level" + d.level
 				})
@@ -184,29 +206,12 @@
 				
 					let newArc = createArc(this);
 					d._i=i;
-					acts.append("path")
+					activities.append("path")
 						.attr("class", "hiddenDonutArcs")
 						.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
 						.attr("d", newArc)
 						.style("fill", "none");
 				});
-				
-				acts.filter(function(d){return hasRoomForText(d)}).append("text")
-				.attr("class", "activityText")
-				//.attr("x", 14) //Move the text from the start angle of the arc
-				.attr("dy", 18) //Move the text down
-				.append("textPath")
-				.attr("startOffset", "50%")
-				.style("text-anchor", "middle")
-				.attr("xlink:href", function(d, i) {
-					return "#activityArc" + d._i; //Use reference on generated arc!
-				})
-				.text(function(d) {
-					return d.name.toUpperCase();
-				});
-				drawActivityPins(acts.filter(function(d){return !hasRoomForText(d)}));
-				//drawActivityCircles(acts.filter(function(d){return !hasRoomForText(d)}));
-				drawActivityText(acts.filter(function(d){return !hasRoomForText(d)}));
 		}
 		function hasRoomForText(activity){
 			let n = activity.name.length;
@@ -257,9 +262,6 @@
 			events.append("path")
 				.attr("d", function(d) {
 					return getPinSvg(25,d.startDateID);
-					return "M " + ((radix) + 25) * Math.sin(d.startDateID * gtoradians) + " " +
-						-((radix) + 25) * Math.cos(d.startDateID * gtoradians) + " L " + ((radix) + 130) * Math.sin(d.startDateID * gtoradians) + " " +
-						-((radix) + 130) * Math.cos(d.startDateID * gtoradians)
 				})
 				.attr("class", "link");
 		}
@@ -300,6 +302,7 @@
 					return -((radix) + 135) * Math.cos(d.startDateID * gtoradians)
 				})
 				.style("text-anchor", function(d) {
+					//When we pass 180 turn the text;
 					return d.startDateID > 180 ? "end" : "start"
 				})
 				.text(function(d) {
