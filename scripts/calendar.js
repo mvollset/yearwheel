@@ -12,7 +12,11 @@ function toThisYearsDate(dateId){
 		function formatDate(dateid){
 			let dd = toThisYearsDate(dateid);
 			return moment(dd).format("DD.MM");
-		}
+        }
+        function dateIdToJsDate(dateid) {
+
+            return dateid!==null ? moment().utc().startOf('year').add(dateid, 'days').toDate() : null;
+        }
 function getMonthData(year){
     const yy=year?year:new Date().getFullYear();
     const durations = getMonthDurations(yy);

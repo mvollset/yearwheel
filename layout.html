@@ -13,7 +13,15 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/mystyle.css" rel="stylesheet" />
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js" crossorigin="anonymous"></script>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js" crossorigin="anonymous"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.common.js" crossorigin="anonymous"></script>-->
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
 </head>
@@ -99,6 +107,7 @@
                                 </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" v-on:click="addItem" >Add event</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary" v-on:click="updateWheel" data-dismiss="modal">Save changes</button>
                         </div>
@@ -116,18 +125,19 @@
     <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+    <script src="//unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.js"></script>
     <script src="/scripts/dist/vue-color.js"></script>
     <script src="/scripts/helpers.js"></script>
     <script src="/scripts/calendar.js"></script>
-    <script src="scripts/savesvgaspng.js"></script>
-    <script src="scripts/d3yearwheel.js"></script>
-    <script src="scripts/wheeldata.js"></script>
+    <script src="/scripts/savesvgaspng.js"></script>
+    <script src="/scripts/d3yearwheel.js"></script>
+    <script src="/scripts/wheeldata.js"></script>
     <script src="/scripts/vue/styleapp.js"></script>
+  
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script type="text/javascript">
         var activityData = [{
-                name: "Samling SIM",
+                name: "Samling SIM2",
                 startDateID: 6,
                 endDateID: 9,
                 level: 0
@@ -164,13 +174,11 @@
 
         ];
 
-        function dateIdToJsDate(dateid) {
-
-            return dateid!==null ? moment().utc().startOf('year').add(dateid, 'days').toDate() : null;
-        }
+        
         let dataItems = [];
-
+        //renderData(activityData, eventData);
         function parseData(dataArray) {
+            let temp=[];
             for (let i = 0; i < dataArray.length; i++) {
                 let res = {
                     name: dataArray[i].name,
@@ -178,11 +186,15 @@
                     endDate: dateIdToJsDate(dataArray[i].endDateID),
                     level: dataArray[i].level,
                 }
-                dataItems.push(res);
+                temp.push(res);
             }
-            dataItems.sort(sortItems);
+            temp.sort(sortItems);
+            dataItems=temp;
         }
+        
         parseData(activityData.concat(eventData));
+        
+                    //renderData(activityData, eventData);
 
        
        

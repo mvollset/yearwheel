@@ -3,48 +3,10 @@
 		//////////////////////// Set-up ////////////////////////////
 		////////////////////////////////////////////////////////////
 		let svg,radix;
-		let gtoradians = Math.PI / 180;
-		//Function for generating a circular path
-		/*function circleGen() {
-			//set defaults
-			var r = function(d) {
-					return d.radius;
-				},
-				x = function(d) {
-					return d.x;
-				},
-				y = function(d) {
-					return d.y;
-				};
-
-			//returned function to generate circle path
-			function circle(d) {
-				let cx = d3.functor(x).call(this, d),
-					cy = d3.functor(y).call(this, d),
-					myr = d3.functor(r).call(this, d);
-				
-				return `M${cx},${cy} m${-myr}, 0 a${myr},${myr} 0 1,0 ${myr*2},0 a${myr},${myr} 0 1,0 ${-myr*2},0Z`;
-			}
-
-			//getter-setter methods
-			circle.r = function(value) {
-				if (!arguments.length) return r;
-				r = value;
-				return circle;
-			};
-			circle.x = function(value) {
-				if (!arguments.length) return x;
-				x = value;
-				return circle;
-			};
-			circle.y = function(value) {
-				if (!arguments.length) return y;
-				y = value;
-				return circle;
-			};
-
-			return circle;
-		}*/
+		const numdaysInHalfYear = (365 + (isLeapYear(curyear)?1:0))/2;
+		const gtodayradians = Math.PI/numdaysInHalfYear;
+		const gtoradians =gtodayradians// Math.PI / 180;
+	
 		function setUp(){
 			var screenWidth = Math.min(window.innerWidth, window.innerHeight);
 			var xoffset = 0;
@@ -54,7 +16,7 @@
 			
 			var margin = {
 					left: 30,
-					top: 30,
+					top: 130,
 					right: 30,
 					bottom: 30
 				},
@@ -320,7 +282,7 @@
 		}
 		function drawActivityText(events){
 			drawPinText(events,function(d){
-				return `${formatDate(d.startDateID)} - ${formatDate(d.startDateID)} ${d.name}`;
+				return `${formatDate(d.startDateID)} - ${formatDate(d.endDateID)} ${d.name}`;
 			});
 		}
 		function drawEventText(events){

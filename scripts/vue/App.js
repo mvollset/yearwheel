@@ -1,7 +1,13 @@
- new Vue({
+var datepickerOptions = {
+    sundayFirst: true
+  }
+  // install plugin
+  Vue.use(window.AirbnbStyleDatepicker, datepickerOptions)
+ var app=new Vue({
             el: '#app',
             components: {
-                vuejsDatepicker
+                vuejsDatepicker,
+                AirbnbStyleDatepicker
             },
             data: function() {
 
@@ -23,16 +29,24 @@
                     const activityData = [];
                     const eventData = [];
                     for (let i = 0; i < dataItems.length; i++) {
-                        let item = getItem(dataItems[i]);
+                        let item = this.getItem(dataItems[i]);
                         if (item.level!==undefined) {
-                            activityData.push(res);
+                            activityData.push(item);
                         }
                         else {
-                            eventData.push(res);
+                            eventData.push(item);
                         }
 
                     }
                     renderData(activityData, eventData);
+                },
+                addItem(){
+                    this.items.push({
+                        startDateID:1,
+                        endDateID:32,
+                        name:"New event",
+                        level:0
+                    });
                 },
                 getItem(item){
                     let res = {
