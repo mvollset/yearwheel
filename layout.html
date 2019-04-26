@@ -22,6 +22,7 @@
     href="https://unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.min.css"
   />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
 </head>
@@ -136,6 +137,10 @@
   
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script type="text/javascript">
+        const apiConnection = axios.create({
+                baseURL: 'https://wheel-api-her.herokuapp.com/',
+                timeout: 5000
+                });
         var activityData = [{
                 name: "Samling SIM2",
                 startDateID: 6,
@@ -185,11 +190,12 @@
                     startDate: dateIdToJsDate(dataArray[i].startDateID),
                     endDate: dateIdToJsDate(dataArray[i].endDateID),
                     level: dataArray[i].level,
+                    _id:dataArray[i]._id
                 }
                 temp.push(res);
             }
             temp.sort(sortItems);
-            dataItems=temp;
+            return temp;
         }
         
         parseData(activityData.concat(eventData));

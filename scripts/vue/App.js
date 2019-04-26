@@ -12,12 +12,28 @@ var datepickerOptions = {
             data: function() {
 
                 return {
-                    name: 'dfgdfg',
-                    items: dataItems
+                    name: null,
+                    items: null,
+                    year:0,
+                    _id:null
 
                 };
 
             },
+            created: function () {
+                
+              },
+              mounted:function(){
+                apiConnection
+                .get('/wheels/5cc2c4f4bbc1bf000491d72c')
+                .then((response) => {
+                    this.name=response.data.wheel.name;
+                    this.year=response.data.wheel.year;
+                    this._id=response.data.wheel._id;
+                    this.items=parseData(response.data.wheel.activities);
+                    this.updateWheel();
+                });
+              },
             methods: {
                 onOk() {
                     console.log('ok')
@@ -25,11 +41,28 @@ var datepickerOptions = {
                 onCancel() {
                     console.log('cancel')
                 },
+                saveActivity(activity){
+                    if(activity._id){
+                        
+                        apiConnection.put(`/activities/${activity._id}`,activity);
+                    }
+                    else{
+                        apiConnection.post(`/activities`,activity).then(result => {
+                            //We must also add the activity to the current wheel
+                            activity._id=result.data.activity._id;
+                             apiConnection.put(`wheels/5cc2c4f4bbc1bf000491d72c`,{activities:[result.data.activity._id]});
+                        })
+                        
+
+                    }
+
+                },
                 updateWheel() {
                     const activityData = [];
                     const eventData = [];
-                    for (let i = 0; i < dataItems.length; i++) {
-                        let item = this.getItem(dataItems[i]);
+                    for (let i = 0; i < this.items.length; i++) {
+                        let item = this.getItem(this.items[i]);
+                        this.saveActivity(item);
                         if (item.level!==undefined) {
                             activityData.push(item);
                         }
@@ -50,6 +83,7 @@ var datepickerOptions = {
                 },
                 getItem(item){
                     let res = {
+                        _id:item._id,
                         name: item.name,
                         level: item.level,
                         startDateID:item.startDate?moment(item.startDate).dayOfYear() - 1:null
