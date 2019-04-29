@@ -21,7 +21,12 @@
 			left: 200px;
 			opacity: .95;
 		}
-		
+		.valid-feedback {
+			display: block;
+		}
+		.invalid-feedback {
+			display: block;
+		}
 		.monthArc {
 			fill: var(--monthArc);
 			stroke: #fff;

@@ -13,6 +13,9 @@ Vue.component('activity-editor', {
                                             <div class="form-group">
                                                 <label>Name</label>
                                                 <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name" />
+                                                <div v-bind:class="validation()">
+                                                  Looks good!
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -48,6 +51,8 @@ Vue.component('activity-editor', {
                                                     v-on:next-month="onMonthChange"
                                                   ></airbnb-style-datepicker>
                                                 </div>
+                                                <div>{{duration}} - {{hasRoomForText}}
+                                                </div>
                                                 </div>
                                             </div>
                               
@@ -68,6 +73,15 @@ Vue.component('activity-editor', {
                         trigger: false
                    }
                 },
+                computed:{
+                  duration:function(){
+                    return moment(this.activity.endDate).dayOfYear() - moment(this.activity.startDate).dayOfYear();
+                  },
+                  hasRoomForText:function(){
+                    const o = this.activity.name.length;
+                    return (this.duration>(o/2));
+                  }
+                },
                  methods:{
                     formatDates: function(dateOne, dateTwo) {
                         var formattedDates = ''
@@ -78,6 +92,11 @@ Vue.component('activity-editor', {
                           formattedDates += ' - ' + dateFns.format(dateTwo, this.dateFormat)
                         }
                         return formattedDates
+                      },
+                      validation:function(){
+                          if(this.activity.endDateID>0)
+                            return hasRoomForText(this.activity)?"valid-feedback":"invalid-feedback"
+                          return "valid-feedback";  
                       },
                       onClosed: function() {
                         var datesStr = this.formatDates(this.inputDateOne, this.inputDateTwo)

@@ -178,7 +178,7 @@
 		function hasRoomForText(activity){
 			let n = activity.name.length;
 			let d = activity.endDateID-activity.startDateID;
-			return (d>(n*3));
+			return (d>(n*2));
 		}
 		function renderActivities(activities){
 				//Get all existing activities
