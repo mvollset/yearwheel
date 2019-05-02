@@ -32,9 +32,10 @@ let colorP = {
             console.log('cancel')
         },
         updateValue(value) {
-            document.documentElement.style.setProperty(this.cssProperty, value.hex);
-            this.color = value
+            this.$emit('updatestyle',{property:this.cssProperty,value:value.hex})
+            this.color = value;
         }
+
     }
 };
 let themePicker = {
@@ -83,7 +84,8 @@ let themePicker = {
         },
         updateTheme(value) {
             for(let p in this.themeProperties){
-                document.documentElement.style.setProperty('--' + p, this.themeProperties[p]);
+                this.$emit('updatestyle',{property:'--' + p,value:this.themeProperties[p]});
+                //document.documentElement.style.setProperty(, this.themeProperties[p]);
             }
         }
     }
@@ -129,8 +131,9 @@ let fontShifter = {
         onCancel() {
             console.log('cancel')
         },
-        updateValue(value) {
-            document.documentElement.style.setProperty('--fontFamily', this.selected);
+        updateValue() {
+            this.$emit('updatestyle',{property:'--fontFamily',value:this.selected});
+            //document.documentElement.style.setProperty('--fontFamily', this.selected);
         }
     }
 }
@@ -157,6 +160,12 @@ new Vue({
         updateValue(value) {
 
         },
+        setCSSProperty(property,value){
+            document.documentElement.style.setProperty(property, value);
+        },
+        updateStyle(event){
+            this.setCSSProperty(event.property,event.value);
+        },
         onShowStyles() {
             let editableProperties = ["--monthTextColor", "--fontFamily", "--level0Color", "--level1Color", "--monthArc", "--activityTextColor"]
             let cssProps = {};
@@ -165,9 +174,7 @@ new Vue({
                 const c = getComputedStyle(m).getPropertyValue(editableProperties[i]);
                 cssProps[editableProperties[i].substr(2)] = c;
             }
-            console.log(JSON.stringify(cssProps, 0, 4))
-            window.alert(JSON.stringify(cssProps, 0, 4));
-
+            console.log(JSON.stringify(cssProps, 0, 4));
         }
     }
 
