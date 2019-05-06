@@ -6,6 +6,7 @@ var datepickerOptions = {
  var app=new Vue({
             el: '#app',
             components: {
+                vuejsDatepicker,
                 AirbnbStyleDatepicker
             },
             data: function() {
@@ -128,21 +129,6 @@ var datepickerOptions = {
                        
                     }
                     return res;
-                },setCSSProperty(property,value){
-                    document.documentElement.style.setProperty(property, value);
-                },
-                updateStyle(event){
-                    this.setCSSProperty(event.property,event.value);
-                },
-                onShowStyles() {
-                    let editableProperties = ["--monthTextColor", "--fontFamily", "--level0Color", "--level1Color", "--monthArc", "--activityTextColor"]
-                    let cssProps = {};
-                    let m = document.getElementById('styleapp');
-                    for (let i = 0; i < editableProperties.length; i++) {
-                        const c = getComputedStyle(m).getPropertyValue(editableProperties[i]);
-                        cssProps[editableProperties[i].substr(2)] = c;
-                    }
-                    console.log(JSON.stringify(cssProps, 0, 4));
                 }
             }
         });
