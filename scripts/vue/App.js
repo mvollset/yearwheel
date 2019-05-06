@@ -25,7 +25,7 @@ var datepickerOptions = {
               },
               mounted:function(){
                 apiConnection
-                .get('/wheels/5cc2c4f4bbc1bf000491d72c')
+                .get('/wheels/5cc7f9f7a10433022b58beb9')
                 .then((response) => {
                     this.name=response.data.wheel.name;
                     this.year=response.data.wheel.year;
@@ -35,6 +35,17 @@ var datepickerOptions = {
                 });
               },
             methods: {
+                getWheelById(id){
+                    apiConnection
+                    .get(`/wheels/${id}`)
+                    .then((response) => {
+                        this.name=response.data.wheel.name;
+                        this.year=response.data.wheel.year;
+                        this._id=response.data.wheel._id;
+                        this.items=parseData(response.data.wheel.activities);
+                        this.updateWheel();
+                    });
+                },
                 onOk() {
                     console.log('ok')
                 },
@@ -47,10 +58,12 @@ var datepickerOptions = {
                         apiConnection.put(`/activities/${activity._id}`,activity);
                     }
                     else{
+                         //We must also add the activity to the current wheel
+                         activity.wheelid=this._id;
                         apiConnection.post(`/activities`,activity).then(result => {
-                            //We must also add the activity to the current wheel
+                           
                             activity._id=result.data.activity._id;
-                             apiConnection.put(`wheels/5cc2c4f4bbc1bf000491d72c`,{activities:[result.data.activity._id]});
+                            
                         })
                         
 
@@ -58,15 +71,37 @@ var datepickerOptions = {
 
                 },
                 updateWheel() {
+                    if(!this._id){
+                        //Create a new wheel
+                        apiConnection.post(`/wheels`,{
+                            name:this.name,
+                            year:this.year
+                        }).then(result => {
+                            //We must also add the activity to the current wheel
+                            //activity._id=result.data.activity._id;
+                            this._id=result.data.wheel._id;
+                            this.items=[];
+                        })
+                    }
+                    else{
+                        //Create a new wheel
+                        apiConnection.put(`/wheels/${this._id}`,{
+                            name:this.name,
+                            year:this.year
+                        }).then(result => {
+                            
+                        })
+                    }
                     const activityData = [];
                     const eventData = [];
-                    for (let i = 0; i < this.items.length; i++) {
+                    for (let i = 0; this.items && i < this.items.length; i++) {
                         let item = this.getItem(this.items[i]);
                         this.saveActivity(item);
                         if (item.level!==undefined) {
                             activityData.push(item);
                         }
                         else {
+                            item.level=-1;
                             eventData.push(item);
                         }
 
@@ -78,17 +113,18 @@ var datepickerOptions = {
                         startDateID:1,
                         endDateID:32,
                         name:"New event",
-                        level:0
+                        level:0,
+                        wheelid:this._id
                     });
                 },
                 getItem(item){
                     let res = {
                         _id:item._id,
                         name: item.name,
-                        level: item.level,
+                        level: item.level>-1?item.level:undefined,
                         startDateID:item.startDate?moment(item.startDate).dayOfYear() - 1:null
                     }
-                    if (item.level!==undefined) {
+                    if (item.level>-1) {
                         res.endDateID = moment(item.endDate).dayOfYear() - 1;
                        
                     }

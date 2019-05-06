@@ -4,7 +4,18 @@ Vue.component('level-editor', {
       event:'change'
     },
     props: ['level'],
-    template: `<div><div class="form-check form-check-inline csslevel0"><input class="form-check-input" type="radio"  
+    template: `<div>
+                    <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio"  
+                                v-model="picked" 
+                                v-on:change="$emit('change', $event.target.value)"
+                                value="-1"/>
+                                <label class="form-check-label">Single day</label>
+                            </div>
+                     </div>       
+    <div class="form-check form-check-inline csslevel0">
+    <input class="form-check-input" type="radio"  
     v-model="picked" 
     v-on:change="$emit('change', $event.target.value)"
     value="0"><label class="form-check-label">1</label></div>

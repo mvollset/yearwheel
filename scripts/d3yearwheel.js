@@ -6,7 +6,7 @@
 		const numdaysInHalfYear = (365 + (isLeapYear(curyear)?1:0))/2;
 		const gtodayradians = Math.PI/numdaysInHalfYear;
 		const gtoradians =gtodayradians// Math.PI / 180;
-	
+	 
 		function setUp(){
 			var screenWidth = Math.min(window.innerWidth, window.innerHeight);
 			var xoffset = 0;
@@ -178,7 +178,7 @@
 		function hasRoomForText(activity){
 			let n = activity.name.length;
 			let d = activity.endDateID-activity.startDateID;
-			return (d>(n*2));
+			return (d>(n*1.5));
 		}
 		function renderActivities(activities){
 				//Get all existing activities

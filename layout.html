@@ -101,6 +101,8 @@
                         <div class="modal-body">
                                 <label for="name">Name:</label>
                                 <input id="name" class="form-control" type="text" v-model="name" />
+                                <label for="name">Year:</label>
+                                <input id="year" class="form-control" type="text" v-model="year"/>
                                 <!--v-model is doing the magic here-->
                                 <p>{{ name }}</p>
                                 <div v-for="activity in items">
@@ -138,7 +140,7 @@
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script type="text/javascript">
         const apiConnection = axios.create({
-                baseURL: 'https://wheel-api-her.herokuapp.com/',
+                baseURL: 'https://ywheel-api.herokuapp.com/',
                 timeout: 5000
                 });
         var activityData = [{

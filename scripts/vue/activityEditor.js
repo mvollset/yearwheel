@@ -21,7 +21,7 @@ Vue.component('activity-editor', {
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Level</label>
-                                                <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=parseInt(val);}">
+                                                <level-editor v-bind:level="activity.level" v-on:change="function(val){activity.level=parseInt(val);if(activity.level<0)activity.endDate=undefined;}">
                                                 </level-editor>
                                             </div>
                                         </div>
@@ -29,13 +29,13 @@ Vue.component('activity-editor', {
                                           <div class="form-group">
                                                 <label>Period</label>  
                                                 <div class="datepicker-trigger">
-                                                  <button v-bind:id="'datepicker-button-trigger-' + activity.name">
+                                                  <button v-bind:id="'datepicker-button-trigger-' + activity.name" class="btn btn-primary">
                                                     {{ formatDates(buttonDateOne, buttonDateTwo) || 'Select dates' }}
                                                   </button>
 
                                                   <airbnb-style-datepicker
                                                     :trigger-element-id="'datepicker-button-trigger-'+ activity.name"
-                                                    :mode="'range'"
+                                                    :mode="activity.level>-1?'range':'single'"
                                                     v-bind:date-one="activity.startDate"
                                                     v-bind:date-two="activity.endDate"
                                                     :min-date="'2019-01-01'"
@@ -79,7 +79,7 @@ Vue.component('activity-editor', {
                   },
                   hasRoomForText:function(){
                     const o = this.activity.name.length;
-                    return (this.duration>(o/2));
+                    return (this.duration>(o*1.5));
                   }
                 },
                  methods:{
@@ -94,8 +94,8 @@ Vue.component('activity-editor', {
                         return formattedDates
                       },
                       validation:function(){
-                          if(this.activity.endDateID>0)
-                            return hasRoomForText(this.activity)?"valid-feedback":"invalid-feedback"
+                          if(this.activity.endDate)
+                            return this.hasRoomForText?"valid-feedback":"invalid-feedback"
                           return "valid-feedback";  
                       },
                       onClosed: function() {
@@ -121,17 +121,4 @@ Vue.component('activity-editor', {
                         console.log('months changed', dates)
                       }
                  }
-    /*data:function(){
-        return {
-            picked:activity.level,
-            name:activity.name,
-            startDate:activity.startDate,
-            endDate:activity.endDate
-        }
-    },
-    computed: {
-        intLevel: function () {
-            return parseInt(this.picked);
-        }
-    }*/
 });
