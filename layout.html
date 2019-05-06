@@ -63,24 +63,24 @@
                     <ul class="nav flex-column">
                         <div id="styleapp">
                             <li class="nav-item">
-                                <css-color-shifter css-property="--monthTextColor" label="Månedstekst"></css-color-shifter>
+                                <css-color-shifter css-property="--monthTextColor" label="Månedstekst"  @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--monthArc" label="Bakgrunn måned"></css-color-shifter>
+                                <css-color-shifter css-property="--monthArc" label="Bakgrunn måned"  @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--level0Color" label="Nivå 1"></css-color-shifter>
+                                <css-color-shifter css-property="--level0Color" label="Nivå 1"  @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--level1Color" label="Nivå 2"></css-color-shifter>
+                                <css-color-shifter css-property="--level1Color" label="Nivå 2"  @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--activityTextColor" label="Aktivitets tekst"></css-color-shifter>
+                                <css-color-shifter css-property="--activityTextColor" label="Aktivitets tekst"  @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
-                            <font-shifter>
+                            <font-shifter @updatestyle="updateStyle($event)">
                             </font-shifter>
                             <button type="button" class="btn btn-primary" v-on:click="onShowStyles()">Show style</button>
-                            <theme-dropdown></theme-dropdown>
+                            <theme-dropdown @updatestyle="updateStyle($event)"></theme-dropdown>
                         </div>
                     </ul>
 
