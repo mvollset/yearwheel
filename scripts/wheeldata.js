@@ -7,36 +7,43 @@
 					name: "Aktivitet X",
 					startDateID: 0,
 					endDateID: 119,
-					level: 0
+					level: 0,
+					_id:"asd"
 				}, {
 					name: "Aktivitet Y",
 					startDateID: 119,
 					endDateID: 153,
-					level: 0
+					level: 0,
+					_id:"asd2"
 				},
 				 {
 					name: "Aktivitet Z",
 					startDateID: 153,
 					endDateID: 170,
-					level: 0
+					level: 0,
+					_id:"asd3"
 				}
 				, {
 					name: "Ekstra moro",
 					startDateID: 0,
 					endDateID: 58,
-					level: 1
+					level: 1,
+					_id:"asd4"
 				}, {
 					name: "Sommerferie",
 					startDateID: 150,
 					endDateID: 256,
-					level: 1
+					level: 1,
+					_id:"as5"
 				}];
 				var eventData = [{
 						name: "Connect",
-						startDateID: 311
+						startDateID: 311,
+						_id:"evt1"
 					}, {
 						name: "ServiceNow release",
-						startDateID: 35
+						startDateID: 35,
+						_id:"evt2"
 					}
 
 				]

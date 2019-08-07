@@ -62,20 +62,21 @@
 			
 		}
 		function drawMonths(){
-			drawMonthArcs(svg);
-			addMonthText(svg);
+			let monthGroup = svg.append("g").attr('id',"monthsetup");
+			drawMonthArcs(monthGroup);
+			addMonthText(monthGroup);
 		
 	
 		}
 		function drawMonthArcs(svg){
 				//Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
 		//Months
-		let arc = d3.svg.arc()
+		let arc = d3.arc()
 			.innerRadius(radix)
 			.outerRadius(radix + 30);
 
 		//Creates function that will turn the month data into start and end angles
-		let pie = d3.layout.pie()
+		let pie = d3.pie()
 			.value(function(d) {
 				return d.endDateID - d.startDateID;
 			})
@@ -95,7 +96,14 @@
 				return "monthArc_" + i;
 			})
 			.attr("d", arc)
-			.each(createMonthTextPath);
+			.each(function(d,i){
+				const newArc = createArc(this);
+				svg.append("path")
+					.attr("class", "hiddenDonutArcs")
+					.attr("id", "donutArc" + i)
+					.attr("d", newArc)
+					.style("fill", "none");
+			});
 		}
 		function addMonthText(svg){
 			//Append the month names within the arcs
@@ -135,17 +143,18 @@
 		const keyFn = function(d){
 			if (!d)
 				return null;
-			return `${d.name}@${d.startDateID}`;
+			return d._id?d._id:`${d.name}@${d.startDateID}`;
 		}
 		function doActivities(acts){
 
-				drawActivityArcs(acts);
+				const retval=drawActivityArcs(acts)
 				drawInlineActivityText(acts.filter(function(d){return hasRoomForText(d)}));
 				drawActivityPins(acts.filter(function(d){return !hasRoomForText(d)}));
 				drawActivityText(acts.filter(function(d){return !hasRoomForText(d)}));
+				return acts;
 		}
 		function drawInlineActivityText(activities){
-			activities.append("text")
+			return activities.append("text")
 			.attr("class", "activityText")
 			//.attr("x", 14) //Move the text from the start angle of the arc
 			.attr("dy", 18) //Move the text down
@@ -160,11 +169,23 @@
 			});
 		}
 		function drawActivityArcs(activities){
-			activities.attr("class", "activities").append("path")
+			let p = activities.attr("class", "activities").append("path")
 				.attr("class", function(d, i) {
 					return "arcer level" + d.level
 				})
-				.attr("d", activityArc).each(function(d, i) {
+				.attr("d", activityArc);
+			 p.each(function(d,i){
+					let newArc = createArc(this);
+					d._i=i;
+					p.append("path")
+						.attr("class", "hiddenDonutArcs")
+						.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
+						.attr("d", newArc)
+						.style("fill", "none");
+				})
+				
+				
+				/*.each(function(d, i) {
 				
 					let newArc = createArc(this);
 					d._i=i;
@@ -173,7 +194,7 @@
 						.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
 						.attr("d", newArc)
 						.style("fill", "none");
-				});
+				});*/
 		}
 		function hasRoomForText(activity){
 			let n = activity.name.length;
@@ -182,20 +203,62 @@
 		}
 		function renderActivities(activities){
 				//Get all existing activities
+				
+				//d3.selectAll('.activities').remove();
 				var acts = svg
 				.selectAll('.activities')
-				.data(activities, activityKeyfn);
-			acts.selectAll('*').remove();
-			//For all existing redraw
-			doActivities(acts);
-			var g = acts.enter().append("g");
-			//do new ones
-			doActivities(g);
-			//remove the deleted
+				.data(activities,  function(d){
+					return d._id;
+				});
 			acts.exit().remove();
+			
+			//For all existing redraw
+			//doActivities(acts);
+			//do new ones
+			let entering  = acts.enter().append("g").attr("class", "activities");
+			//drawActivityArcs(entering);
+			/*let arcs=entering.append("path")
+			.attr("class", function(d, i) {
+				return "arcer level" + d.level
+			})
+			.attr("d", activityArc)
+			//let textArcs = entering
+			.append("path")
+			.attr("id", function(d, i) {
+				d._i=i;
+				return "activityArc" + d._i;
+			})
+			.attr("d", createArc(activityArc))
+			.attr("class","hiddenDonutArcs")
+			.style('fill','none');
+			/*.each(function(d,i){
+				let newArc = createArc(this);
+				d._i=i;
+				entering.append("path")
+					.attr("class", "hiddenDonutArcs")
+					.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
+					.attr("d", newArc)
+					.style("fill", "none");
+			})
+			/*arcs.each(function(d,i){
+				let newArc = createArc(this);
+				d._i=i;
+				entering.append("path")
+					.attr("class", "hiddenDonutArcs")
+					.attr("id", "activityArc" + d._i) //Keep reference on generated arc!
+					.attr("d", newArc)
+					.style("fill", "none");
+			})*/
+			//let updated=doActivities(entering);
+			acts= acts.merge(entering);
+			let i=0;
+			doActivities(acts);
+			//g.merge(acts.enter());
+			//remove the deleted
+			
 		}
 		let activityArc=
-			d3.svg.arc()
+			d3.arc()
 				.innerRadius(function(d, i) {
 					return radix + (d.level * 30 + 35)
 				})
@@ -242,7 +305,7 @@
 		}
 		function drawActivityPins(activities){
 			//Same as event pins, but move starting point based on level.
-			activities.append("path")
+			return activities.append("path")
 				.attr("d", function(d) {
 					return getPinSvg(d.level * 30 + 60,d.startDateID);			
 				})

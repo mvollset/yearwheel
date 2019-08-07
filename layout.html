@@ -12,7 +12,7 @@
     <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/mystyle.css" rel="stylesheet" />
-    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3.v5.js"></script>
     
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js" crossorigin="anonymous"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.common.js" crossorigin="anonymous"></script>-->
@@ -54,6 +54,7 @@
                             <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny periode</button>
                         </li>
                     </ul>
+                    <wheel-picker @wheelselected="getWheelById($event)"></wheel-picker>
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>Utseende</span>
                         <a class="d-flex align-items-center text-muted" href="#">
@@ -136,51 +137,60 @@
     <script src="/scripts/d3yearwheel.js"></script>
     <script src="/scripts/wheeldata.js"></script>
     <script src="/scripts/vue/fontshifter.js"></script>
+    <script src="/scripts/vue/wheelpicker.js"></script>
     <!--<script src="/scripts/vue/styleapp.js"></script>-->
   
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script type="text/javascript">
         const apiConnection = axios.create({
                 baseURL: 'https://ywheel-api.herokuapp.com/',
-                timeout: 5000
+                timeout: 7500
                 });
-        var activityData = [{
-                name: "Samling SIM2",
-                startDateID: 6,
-                endDateID: 9,
-                level: 0
-            }, {
-                name: "Impact",
-                startDateID: 22,
-                endDateID: 23,
-                level: 0
-            },
-            {
-                name: "Samling SIM",
-                startDateID: 27,
-                endDateID: 30,
-                level: 0
-            }, {
-                name: "Ekstra moro",
-                startDateID: 0,
-                endDateID: 58,
-                level: 1
-            }, {
-                name: "Sommerferie",
-                startDateID: 150,
-                endDateID: 256,
-                level: 1
-            }
-        ];
-        var eventData = [{
-                name: "Apps allmøte",
-                startDateID: 24
-            }, {
-                name: "ServiceNow release",
-                startDateID: 35
-            }
+                var activityData =[{"_id":"5cd1b23c44dfc80004daf687","name":"Jallsdfsdf","level":0,"startDateID":120,"endDateID":150,"_i":0},{"_id":"5cd1b24444dfc80004daf688","name":"Jall","level":0,"startDateID":59,"endDateID":87,"_i":1},{"_id":"5cd1b59244dfc80004daf689","name":"QWEww","level":1,"startDateID":151,"endDateID":179,"_i":2},{"_id":"5cd1b61fa1d5b60004fc3781","name":"QWE","level":0,"startDateID":151,"endDateID":179,"_i":3}]; 
+                /*[{
+					name: "Aktivitet X",
+					startDateID: 0,
+					endDateID: 119,
+					level: 0,
+					_id:"asd"
+				}, {
+					name: "Aktivitet Y",
+					startDateID: 119,
+					endDateID: 153,
+					level: 0,
+					_id:"asd2"
+				},
+				 {
+					name: "Aktivitet Z",
+					startDateID: 153,
+					endDateID: 170,
+					level: 0,
+					_id:"asd3"
+				}
+				, {
+					name: "Ekstra moro",
+					startDateID: 0,
+					endDateID: 58,
+					level: 1,
+					_id:"asd4"
+				}, {
+					name: "Sommerferie",
+					startDateID: 150,
+					endDateID: 256,
+					level: 1,
+					_id:"as5"
+				}];*/
+				var eventData = [{
+						name: "Connect",
+						startDateID: 311,
+						_id:"evt1"
+					}, {
+						name: "ServiceNow release",
+						startDateID: 35,
+						_id:"evt2"
+					}
 
-        ];
+				]
 
         
         let dataItems = [];
@@ -203,7 +213,7 @@
         
         parseData(activityData.concat(eventData));
         
-                    //renderData(activityData, eventData);
+                    renderData(activityData, eventData);
 
        
        
