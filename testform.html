@@ -9,221 +9,582 @@
     <link href="/css/roboto.css" rel="stylesheet" />
     <link href="/css/sopra.css" rel="stylesheet" />
     <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/mystyle.css" rel="stylesheet" />
-    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3.v5.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-light fixed-top bg-light flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
-            </li>
-        </ul>
-    </nav>
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="padding:48px">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">Hendelser</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Nytt årshjul</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny hendelse</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny periode</button>
-                        </li>
-                    </ul>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Utseende</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-          </a>
-                    </h6>
-                    <ul class="nav flex-column">
-                        <div id="styleapp">
-                        <li class="nav-item">
-                            <span>Månedstekst</span>
-                             <css-color-shifter
-                            css-property="--monthTextColor"
-                             ></css-color-shifter>
-                        </li>
-                        <li class="nav-item">
-                            <span>Nivå 1 </span>
-                             <css-color-shifter
-                            css-property="--level0Color"
-                             ></css-color-shifter>
-                        </li>
-                        <li class="nav-item">
-                            <span>Nivå 2 </span>
-                            <css-color-shifter
-                            css-property="--level1Color"
-                             ></css-color-shifter>
-                        </li>
-                        <li>
-                            <font-shifter>
-                                
-                            </font-shifter>
-                        </li>
-                        </div>
-                    </ul>
-
-
-                </div>
-
-            </nav>
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Kalender</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-                        </div>
-                        <div class="modal-body">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
+            <div id="chart">
             </div>
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div id="chart" style="padding:48px">
-                    <div id="app">
-                        <label for="name">Name:</label>
-                        <input id="name" class="form-control" type="text" v-model="name" />
-                        <!--v-model is doing the magic here-->
-                        <p>{{ name }}</p>
-                        <div v-for="activity in items">
-                           <div class="row">
-                                <div class="form-group">
-                                   <label>Name</label>
-                                   <input type="text" name="name" v-model="activity.name" class="form-control" placeholder="name"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Start date</label>
-                                    <vuejs-datepicker v-model="activity.startDate" input-class="form-control"></vuejs-datepicker>
-                                </div>
-                                <div class="form-group">
-                                    <label>End date</label>
-                                    <vuejs-datepicker v-model="activity.endDate" input-class="form-control"></vuejs-datepicker>
-                                </div>
-                                <div class="form-group">
-                                    <label>Level</label>
-                                    <level-editor
-                                     v-bind:level="activity.level">
-                                    </level-editor>
-                                </div>
-                           </div>    
-                        </div>
-                    </div>
-                </div>
-            </main>
         </div>
-    </div>
-    </div>
-    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/vuejs-datepicker"></script>
-    <script src="/scripts/dist/vue-color.js"></script>
-    <script type="text/javascript">
-        var activityData=  [{
-					name: "Aktivitet X",
-					startDateID: 0,
-					endDateID: 119,
-					level: 0
-				}, {
-					name: "Aktivitet Y",
-					startDateID: 119,
-					endDateID: 153,
-					level: 0
-				},
-				 {
-					name: "Aktivitet Z",
-					startDateID: 153,
-					endDateID: 170,
-					level: 0
-				}
-				, {
-					name: "Ekstra moro",
-					startDateID: 0,
-					endDateID: 58,
-					level: 1
-				}, {
-					name: "Sommerferie",
-					startDateID: 150,
-					endDateID: 256,
-					level: 1
-				}];
-			var	eventData = [{
-						name: "Connect",
-						startDateID: 311
-					}, {
-						name: "ServiceNow release",
-						startDateID: 35
-					}
+        <script type="text/javascript">
+            var monthData = getMonthData();
+            const curyear = new Date().getFullYear();
+            const moment0 = moment(curyear + "-01-01"); //1. of Janary this year
+            function toThisYearsDate(dateId) {
+                let mom = moment(moment0);
+                mom.add(dateId, 'days');
+                return mom;
+            }
+            ////////////////////////////////////////////////////////////
+            //////////////////////// Set-up ////////////////////////////
+            ////////////////////////////////////////////////////////////
+            let radix;
+            const numdaysInHalfYear = (365 + (isLeapYear(2020) ? 1 : 0)) / 2;
+            const gtodayradians = Math.PI / numdaysInHalfYear;
+            const gtoradians = gtodayradians// Math.PI / 180;
 
-				];
-		function dateIdToJsDate(dateid){
-					return moment().utc().startOf('year').add(dateid,'days').toDate();
-				}
-		let dataItems=[];
-		function parseData(dataArray){
-		    for(let i = 0;i<dataArray.length;i++){
-		        let res = {
-		            name:dataArray[i].name,
-		            startDate:dateIdToJsDate(dataArray[i].startDateID),
-		            endDate:dateIdToJsDate(dataArray[i].endDateID),
-		            level:dataArray[i].level,
-		        }
-		        dataItems.push(res);
-		    }
-		    dataItems.sort(function(a,b){
-		        return a.startDateID-b.startDateID
-		    });
-		}
-		parseData(activityData.concat(eventData));
-	
-		Vue.component('level-editor',{
-		   props:['level'],
-		   template:'<div><div class="form-check form-check-inline csslevel0"><input class="form-check-input" type="radio"  value="0" v-model="level"><label class="form-check-label">Level 1</label></div><div class="form-check form-check-inline csslevel1"><input class="form-check-input" type="radio"  value="1" v-model="level"><label class="form-check-label">Level 2</label></div></div>'
-		});
-        new Vue({
-        el: '#app', 
-            components: {
-      	        vuejsDatepicker
-      	        
-        },
-        data: function(){
-            
-            return   { 
-                name: 'dfgdfg',
-                items:dataItems
+            //function setUp() {
+            var screenWidth = Math.min(window.innerWidth, window.innerHeight);
+            var xoffset = 0;
+            if (window.innerWidth > window.innerHeight) {
+                xoffset = ((window.innerWidth - window.innerHeight) / 2) - 320;
+            }
+
+            var margin = {
+                left: 30,
+                top: 130,
+                right: 30,
+                bottom: 30
+            },
+                width = Math.min(screenWidth) - margin.left - margin.right,
+                height = Math.min(screenWidth) - margin.top - margin.bottom;
+            radix = width * 0.7 / 2;
+            let activityArc =
+                d3.arc()
+                    .innerRadius(function (d) {
+                        return radix + (d.level * 30 + 35)
+                    })
+                    .outerRadius(function (d) {
+                        return radix + (d.level * 30 + 60)
+                    })
+                    .startAngle(function (d) {
+                        return d.startDateID * gtoradians
+                    })
+                    .endAngle(function (d) {
+                        return d.endDateID * gtoradians
+                    });
+            function createMonthTextPath(d, i) {
+                const newArc = createArc(this);
+                svg.append("path")
+                    .attr("class", "hiddenDonutArcs")
+                    .attr("id", "donutArc" + i)
+                    .attr("d", newArc)
+                    .style("fill", "none");
+
+            }
+            function drawMonths(svg) {
+                let monthGroup = svg.append("g").attr('id', "monthsetup");
+                drawMonthArcs(monthGroup);
+                addMonthText(monthGroup);
+
+
+            }
+            function drawMonthArcs(svg) {
+                //Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius 
+                //Months
+                let arc = d3.arc()
+                    .innerRadius(radix)
+                    .outerRadius(radix + 30);
+
+                //Creates function that will turn the month data into start and end angles
+                let pie = d3.pie()
+                    .value(function (d) {
+                        return d.endDateID - d.startDateID;
+                    })
+                    .padAngle(.01)
+                    .sort(null);
+
+                ////////////////////////////////////////////////////////////
+                //////////////////// Create the Slices /////////////////////
+                ////////////////////////////////////////////////////////////
+
+                //Draw the arcs themselves
+                svg.selectAll(".monthArc")
+                    .data(pie(monthData))
+                    .enter().append("path")
+                    .attr("class", "monthArc")
+                    .attr("id", function (d, i) {
+                        return "monthArc_" + i;
+                    })
+                    .attr("d", arc)
+                    .each(function (d, i) {
+                        const newArc = createArc(this);
+                        svg.append("path")
+                            .attr("class", "hiddenDonutArcs")
+                            .attr("id", "donutArc" + i)
+                            .attr("d", newArc)
+                            .style("fill", "none");
+                    });
+            }
+            function addMonthText(svg) {
+                //Append the month names within the arcs
+                svg.selectAll(".monthText")
+                    .data(monthData)
+                    .enter().append("text")
+                    .attr("class", "monthText")
+                    //.attr("x", 14) //Move the text from the start angle of the arc
+                    .attr("dy", 19) //Move the text down
+                    .append("textPath")
+                    .attr("startOffset", "50%")
+                    .style("text-anchor", "middle")
+                    .attr("xlink:href", function (d, i) {
+                        return "#donutArc" + i;
+                    })
+                    .text(function (d) {
+                        return d.month.toUpperCase();
+                    });
+            }
+
+            function drawInlineActivityText(activities) {
+                return activities.append("text")
+                    .attr("class", "activityText")
+                    //.attr("x", 14) //Move the text from the start angle of the arc
+                    .attr("dy", 18) //Move the text down
+                    .append("textPath")
+                    .attr("startOffset", "50%")
+                    .style("text-anchor", "middle")
+                    .attr("xlink:href", function (d, i) {
+                        return "#activityArc" + d._id; //Use reference on generated arc!
+                    })
+                    .text(function (d) {
+                        return d.name.toUpperCase();
+                    });
+            }
+            function hasRoomForText(activity) {
+                let n = activity.name.length;
+                let d = activity.endDateID - activity.startDateID;
+                return (d > (n * 1.5));
+            }
+            function drawPinMarkers(events, startOffset) {
+                events.append("circle")
+                    .attr("r", 10)
+                    .style("fill", "#000")
+                    .style("opacity", ".4")
+                    .attr("cx", function (d) {
+                        return ((radix) + 15 + startOffset) * Math.sin(d.startDateID * gtoradians);
+                    })
+                    .attr("cy", function (d) {
+                        return -((radix) + 15 + startOffset) * Math.cos(d.startDateID * gtoradians);
+                    })
+            }
+            function drawActivityPins(activities) {
+                //Same as event pins, but move starting point based on level.
+                return activities.append("path")
+                    .attr("d", function (d) {
+                        return getPinSvg(d.level * 30 + 60, d.startDateID);
+                    })
+                    .attr("class", "link activity");
+                //
+            }
+            function getPinSvg(startOffset, startDateID) {
+                const x1 = (radix + (startOffset)) * Math.sin(startDateID * gtoradians);
+                const y1 = -(radix + (startOffset)) * Math.cos(startDateID * gtoradians);
+                const x2 = ((radix) + 130) * Math.sin(startDateID * gtoradians);
+                const y2 = -((radix) + 130) * Math.cos(startDateID * gtoradians);
+                return `M ${x1} ${y1} L ${x2} ${y2}`;
+            }
+            function drawPinText(events, textfn,isActivity) {
+                events.append("text")
+                    .attr("x", function (d) {
+                        return ((radix) + 135) * Math.sin(d.startDateID * gtoradians)
+                    })
+                    .attr("y", function (d) {
+                        return -((radix) + 135) * Math.cos(d.startDateID * gtoradians)
+                    })
+                    .style("text-anchor", function (d) {
+                        //When we pass 180 turn the text;
+                        return d.startDateID > 180 ? "end" : "start"
+                    })
+                    .attr('class',isActivity?"activitypin":"eventpin")
+                    .text(function (d) {
+                        /*d3.select("body").append('div')
+                        .attr('pointer-events', 'none')
+                        .attr("class", "toolxtip")
+                        //.style("opacity", 1)
+                        .html( "<b>" + d.name + "<b/")
+                        .style("left", (((radix) + 135) * Math.sin(d.startDateID * gtoradians) + 644+ "px"))
+                        .style("top", (-(((radix) + 135) * Math.cos(d.startDateID * gtoradians)) +644 +"px"));*/
+                        return textfn(d);
+                        //return formatDate(d.startDateID) + " - " + formatDate(d.endDateID) + " " +d.name;
+                    });
+            }
+            function drawActivityText(events) {
+                drawPinText(events, function (d) {
+                    return `${formatDate(d.startDateID)} - ${formatDate(d.endDateID)} ${d.name}`;
+                },true);
+            }
+            //setUp();
+            let counter = 0;
+            let svg;
+            (async () => {
                 
-            };
-            
-        }
-            
-        });
-       
-    </script>
-    <script src="/scripts/vue/styleapp.js"></script>
+                svg = d3.select("#chart").append("svg").attr('id', "thewheel")
+                    .attr("width", (width + margin.left + margin.right))
+                    .attr("height", (height + margin.top + margin.bottom))
+                    .attr("style", "margin-left:" + xoffset + "px;")
+                    .append("g").attr("class", "wrapper")
+                    .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")")
+                drawMonths(svg);
+                while (false) {
+                    const t = svg.transition()
+                        .duration(750);
+                    svg.selectAll(".dimmy")
+                        .data(randomLetters(), d => d._id)
+                        .join(
+                            enter => {
+                                let gr = enter.append('g').attr('class', 'dimmy');
+                                drawActivityArcs(gr);
+                                drawInlineActivityText(gr.filter(function (d) { return hasRoomForText(d) }));
+                                drawActivityPins(gr.filter(function (d) { return !hasRoomForText(d) }));
+                                drawActivityText(gr.filter(function (d) { return !hasRoomForText(d) }));
+                                return gr;
+                            }
+                            ,
+                            update => {
+                                update.select('.arcer')
+                                    .attr("class", function (d, i) {
+                                        return "arcer level" + d.level
+                                    })
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => arcTween(d)));
+                                update.select('.arcer')
+                                    .attr("class", function (d, i) {
+                                        return "arcer level" + d.level
+                                    })
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => arcTween(d)));
+                                update.select('.hiddenDonutArcs')
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => {
+                                            return hiddenArcTween(d);
+                                        }
+                                        ))
+                                update.selectAll('text').remove();
+                                update.call(update=>{
+                                    drawInlineActivityText(update);
+                                })
+                                return update;
+                            },
+                            exit => exit
+                                .attr("fill", "brown")
+                                .call(exit => exit.transition(t)
+                                    .attr("y", 30)
+                                    .attr("cy", 30)
+                                    .remove())
+                        );
+
+
+
+                    //yield svg.node();
+                    await tick(50000000000);
+                }
+            })();
+            function next(){
+                const t = svg.transition()
+                        .duration(750);
+                    svg.selectAll(".dimmy")
+                        .data(randomLetters(), d => d._id)
+                        .join(
+                            enter => {
+                                let gr = enter.append('g').attr('class', 'dimmy');
+                                drawActivityArcs(gr);
+                                drawInlineActivityText(gr.filter(function (d) { return hasRoomForText(d) }));
+                                drawActivityPins(gr.filter(function (d) { return !hasRoomForText(d) }));
+                                drawActivityText(gr.filter(function (d) { return !hasRoomForText(d) }));
+                                return gr;
+                            }
+                           ,
+                            update => {
+                                update.select('.arcer')
+                                    .attr("class", function (d, i) {
+                                        return "arcer level" + d.level
+                                    })
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => arcTween(d)));
+                                update.select('.arcer')
+                                    .attr("class", function (d, i) {
+                                        return "arcer level" + d.level
+                                    })
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => arcTween(d)));
+                                update.select('.hiddenDonutArcs')
+                                    .call(update => update.transition()
+                                        .duration(750)
+                                        .attrTween("d", (d, i) => {
+                                            return hiddenArcTween(d);
+                                        }
+                                        ))
+                                update.select('.activityText').remove();
+                                update.select('.link.activity').remove();
+                                update.select('.activitypin').remove();
+                                update.call(update=>drawInlineActivityText(update.filter(function (d) { return hasRoomForText(d) })));
+                                setTimeout(()=>{
+                                    update.call(update=>drawActivityPins(update.filter(function (d) { return !hasRoomForText(d) })));
+                                    update.call(update=>drawActivityText(update.filter(function (d) { return !hasRoomForText(d) })));
+                                },750)
+                                
+                                return update;
+                            }
+                            ,
+                            exit => exit
+                                .call(exit => exit.transition(t)
+                                    .attr("y", 30)
+                                    .attr("cy", 30)
+                                    .remove())
+                        );
+
+
+
+            }
+            function randomLetters() {
+                var activityData = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Grønn 1", "level": 0, "startDateID": 120, "endDateID": 122, "_i": 0 },
+                { "_id": "5cd1b24444dfc80004daf688", "name": "Grønn 2", "level": 0, "startDateID": 59, "endDateID": 87, "_i": 1 },
+                { "_id": "5cd1b59244dfc80004daf689", "name": "Rød 1", "level": 1, "startDateID": 151, "endDateID": 179, "_i": 2 },
+                { "_id": "5cd1b61fa1d5b60004fc3781", "name": "Grønn 3", "level": 0, "startDateID": 185, "endDateID": 210, "_i": 3 }];
+                var activityData2 = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Grønn 1", "level": 0, "startDateID": 100, "endDateID": 130, "_i": 0 },
+                { "_id": "5cd1b24444dfc80004daf688", "name": "Grønn 2", "level": 0, "startDateID": 59, "endDateID": 87, "_i": 1 },
+                { "_id": "5cd1b59244dfc80004daf689", "name": "Rød 1", "level": 1, "startDateID": 151, "endDateID": 179, "_i": 2 },
+                { "_id": "5cd1b61fa1d5b60004fc3781", "name": "Grønn 3", "level": 0, "startDateID": 151, "endDateID": 179, "_i": 3 }];
+                var activityData3 = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Grønn 1", "level": 0, "startDateID": 120, "endDateID": 122, "_i": 0 },
+                { "_id": "5cd1b24444dfc80004daf688", "name": "Grønn 2", "level": 1, "startDateID": 59, "endDateID": 87, "_i": 1 },
+                { "_id": "5cd1b61fa1d5b60004fc3781", "name": "Grønn 3", "level": 0, "startDateID": 151, "endDateID": 179, "_i": 3 }];
+                var activityData4 = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Grønn 1", "level": 0, "startDateID": 120, "endDateID": 122, "_i": 0 },
+                { "_id": "5cd1b24444dfc80004daf688", "name": "Grønn 2", "level": 0, "startDateID": 59, "endDateID": 87, "_i": 1 },
+                { "_id": "5cd1b59244dfc80004daf689", "name": "Rød 1", "level": 1, "startDateID": 151, "endDateID": 179, "_i": 2 },
+                { "_id": "5cd1b61fa1d5b60004fc3781", "name": "Grønn 3", "level": 0, "startDateID": 110, "endDateID": 179, "_i": 3 }];
+                if (counter == 0) {
+                    ++counter;
+                    return activityData;
+                }
+                if (counter == 1) {
+                    ++counter;
+                    return activityData2;
+                }
+                if (counter == 2) {
+                    ++counter;
+                    return activityData3;
+                }
+                if (counter == 3) {
+                    counter = 0;
+                    return activityData4;
+                }
+
+                /*let t = d3.shuffle(activityData)
+                    .slice(0, Math.floor(1 + Math.random() * 3));
+                return t.map((i)=>{
+                    return {
+                        _id:i._id,
+                        name:i.name,
+                        level:i.level,
+                        startDateID:i.startDateID + Math.floor(Math.random()*5),
+                        endDateID:i.endDateID + Math.floor(Math.random()*5),
+                        _i:i._i
+                    }
+                })*/
+            }
+            async function tick(duration) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(function () {
+                        resolve("Success!")  // Yay! Everything went well!
+                    }, duration)
+                });
+            }
+            // Returns a tween for a transition’s "d" attribute, transitioning any selected
+            // arcs from their current angle to the specified new angle.
+            function arcTween(datum) {
+                //let newArc = activityArc(d);
+                this._angles;
+                const newStartAngle = datum.startDateID * gtoradians;
+                const newEndAngle = datum.endDateID * gtoradians;
+                const level = datum.level;
+                const arcer = d3.arc()
+                    .innerRadius(function (d) {
+                        return radix + (level * 30 + 35)
+                    })
+                    .outerRadius(function (d) {
+                        return radix + (level * 30 + 60)
+                    })
+                const interpolate = d3.interpolate(this._angles.endAngle, newEndAngle);
+                const interpolateStart = d3.interpolate(this._angles.startAngle, newStartAngle);
+                return i = (t) => {
+                    return arcer({
+                        startAngle: interpolateStart(t),
+                        endAngle: interpolate(t)
+                    })
+                };
+            }
+            function hiddenArcTween(datum) {
+                //let newArc = activityArc(d);
+                this._angles;
+                const newStartAngle = datum.startDateID * gtoradians;
+                const newEndAngle = datum.endDateID * gtoradians;
+                const level = datum.level;
+                const arcer = d3.arc()
+                    .innerRadius(function (d) {
+                        return radix + (level * 30 + 35)
+                    })
+                    .outerRadius(function (d) {
+                        return radix + (level * 30 + 60)
+                    })
+                const interpolate = d3.interpolate(this._angles.endAngle, newEndAngle);
+                const interpolateStart = d3.interpolate(this._angles.startAngle, newStartAngle);
+                return i = (t) => {
+                    let arc = arcer({
+                        startAngle: interpolateStart(t),
+                        endAngle: interpolate(t)
+                    });
+                    return createArc(arc);
+                };
+            }
+            //M311.3024720372249,-194.2757663825131A366.95,366.95,0,0,1,365.85558133028684,-28.31953582737284L340.9301431690737,-26.390149274206685A341.95,341.95,0,0,0,290.09369209191726,-181.03991910205846Z
+            //M311.3024720372249 -194.2757663825131A366.95 366.95 0 0 1 365.85558133028684 -28.31953582737284"
+            function createArc(d) {
+                //A regular expression that captures all in between the start of a string (denoted by ^) 
+                //and the first capital letter L
+                var firstArcSection = /(^.+?)L/;
+
+                //The [1] gives back the expression between the () (thus not the L as well) 
+                //which is exactly the arc statement
+                let newArc;
+                if (typeof d == 'string') {
+                    newArc = firstArcSection.exec(d)[1];
+                }
+                else
+                    newArc = firstArcSection.exec(d3.select(d).attr("d"))[1];
+                //Replace all the comma's so that IE can handle it -_-
+                //The g after the / is a modifier that "find all matches rather than stopping after the first match"
+                return newArc.replace(/,/g, " ");
+            }
+            function parseData(dataArray) {
+                let temp = [];
+                for (let i = 0; i < dataArray.length; i++) {
+                    let res = {
+                        name: dataArray[i].name,
+                        startDate: dateIdToJsDate(dataArray[i].startDateID),
+                        endDate: dateIdToJsDate(dataArray[i].endDateID),
+                        level: dataArray[i].level,
+                        _id: dataArray[i]._id
+                    }
+                    temp.push(res);
+                }
+                temp.sort(sortItems);
+                return temp;
+            }
+            /*global moment*/
+            function isLeapYear(year) {
+                return moment([year]).isLeapYear();
+            }
+            function toThisYearsDate(dateId) {
+                let mom = moment(moment0);
+                mom.add(dateId, 'days');
+                return mom;
+            }
+            function formatDate(dateid) {
+                let dd = toThisYearsDate(dateid);
+                return moment(dd).format("DD.MM");
+            }
+            function dateIdToJsDate(dateid) {
+
+                return dateid !== null ? moment().utc().startOf('year').add(dateid, 'days').toDate() : null;
+            }
+            function getMonthData(year) {
+                const yy = year ? year : new Date().getFullYear();
+                const durations = getMonthDurations(yy);
+                let monthData = [];
+                let start = 0;
+                for (let i = 0; i < 12; i++) {
+                    monthData.push({
+                        month: moment.months(i),
+                        startDateID: start,
+                        endDateID: (start + durations[i]) - 1
+                    });
+                    start += durations[i];
+                }
+                return monthData;
+
+            }
+            function getMonthDurations(year) {
+
+                return [31, //Januar
+                    isLeapYear(year) ? 29 : 28, //Februar
+                    31, //Mars
+                    30, //April
+                    31, //Mai
+                    30, //Juni
+                    31, //Juli
+                    31, //August
+                    30, //September
+                    31, //Oktober
+                    30, //November
+                    31];
+            }
+            function sortItems(a, b) {
+                return a.startDateID - b.startDateID;
+            }
+            function drawActivityArcs(activities) {
+                var p = activities.append("path")
+                    .attr("class", function (d, i) {
+                        return "arcer level" + d.level
+                    })
+                    .attr("d", activityArc)
+                    .each(d => {
+                        this._angles = {
+                            startAngle: d.startDateID * gtoradians,
+                            endAngle: d.endDateID * gtoradians
+                        }
+                    });
+                activities.append('path')
+                    .attr("class", "hiddenDonutArcs")
+                    .attr("id", (d) => ("activityArc" + d._id)) //Keep reference on generated arc!
+                    .style("fill", "none")
+                    .attr("d", (d) => {
+                        let ds = activityArc(d);
+                        return createArc(ds);
+                    });
+
+                /*activities.append("path")
+                    .attr("class", "hiddenDonutArcs")
+                    .attr("id", (d)=>"activityArc" + d._i) //Keep reference on generated arc!
+                    .attr("d", createArc(activityArc))
+                    .style("fill", "none");	*/
+                return p;
+            }
+            function drawEventCircles(events) {
+                drawPinMarkers(events, 0);
+                /*events.append("circle")
+                .attr("r", 10)
+                .style("fill", "#000")
+                .style("opacity", ".4")
+                .attr("cx", function(d) {
+                    return ((radix) + 15) * Math.sin(d.startDateID * gtoradians);
+                })
+                .attr("cy", function(d) {
+                    return -((radix) + 15) * Math.cos(d.startDateID * gtoradians);
+                })*/
+            }
+            function drawEventPins(events) {
+                events.append("path")
+                    .attr("d", function (d) {
+                        return getPinSvg(25, d.startDateID);
+                    })
+                    .attr("class", "link");
+            }
+        </script>
+        <script src="scripts/helpers.js"></script>
+        <button onclick="next()">CLICK</button>
+    </div>
 </body>
 
 </html>

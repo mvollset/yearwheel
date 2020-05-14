@@ -53,9 +53,12 @@
 		}
 		.csslevel1 {
 			background-color: var(--level1Color);
+			color: var(--activityTextColor);
 		}
 		.csslevel0 {
 			background-color: var(--level0Color);
+			color: var(--activityTextColor);
+			font: var(--fontFamily);
 		}
 		.link {
 			fill: "none";

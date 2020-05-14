@@ -9,43 +9,42 @@
     <!--<link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />-->
     <link href="/css/roboto.css" rel="stylesheet" />
     <link href="/css/sopra.css" rel="stylesheet" />
-    <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/mystyle.css" rel="stylesheet" />
     <script src="//d3js.org/d3.v5.js"></script>
-    
-    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js" crossorigin="anonymous"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js" crossorigin="anonymous"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.common.js" crossorigin="anonymous"></script>-->
-    <link
-    rel="stylesheet"
-    type="text/css"
-    href="https://unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.min.css"
-  />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="//unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.js"></script>
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/nb.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-light fixed-top bg-light flex-md-nowrap p-0 shadow">
+    <!--<nav class="navbar navbar-light fixed-top bg-light flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="#">Sign out</a>
             </li>
         </ul>
-    </nav>
-    <div class="container-fluid" id="app">
+    </nav>-->
+    <div class="container-fluid" >
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="padding:48px">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="padding:48px" id="app">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">Hendelser</button>
+                            <button type="button" class="btn btn-link" data-toggle="modal"
+                                data-target="#exampleModal">Hendelser</button>
                         </li>
                         <li class="nav-item">
-                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Nytt årshjul</button>
+                            <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Nytt
+                                årshjul</button>
                         </li>
                         <li class="nav-item">
                             <button type="button" class="btn btn-link" onclick="addPersonalTouch()">Ny hendelse</button>
@@ -55,171 +54,202 @@
                         </li>
                     </ul>
                     <wheel-picker @wheelselected="getWheelById($event)"></wheel-picker>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>Utseende</span>
                         <a class="d-flex align-items-center text-muted" href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-          </a>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-plus-circle">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                        </a>
                     </h6>
                     <ul class="nav flex-column">
                         <div id="styleapp">
                             <li class="nav-item">
-                                <css-color-shifter css-property="--monthTextColor" label="Månedstekst"  @updatestyle="updateStyle($event)"></css-color-shifter>
+                                <css-color-shifter css-property="--monthTextColor" label="Månedstekst"
+                                    @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--monthArc" label="Bakgrunn måned"  @updatestyle="updateStyle($event)"></css-color-shifter>
+                                <css-color-shifter css-property="--monthArc" label="Bakgrunn måned"
+                                    @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--level0Color" label="Nivå 1"  @updatestyle="updateStyle($event)"></css-color-shifter>
+                                <css-color-shifter css-property="--level0Color" label="Nivå 1"
+                                    @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--level1Color" label="Nivå 2"  @updatestyle="updateStyle($event)"></css-color-shifter>
+                                <css-color-shifter css-property="--level1Color" label="Nivå 2"
+                                    @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <li class="nav-item">
-                                <css-color-shifter css-property="--activityTextColor" label="Aktivitets tekst"  @updatestyle="updateStyle($event)"></css-color-shifter>
+                                <css-color-shifter css-property="--activityTextColor" label="Aktivitets tekst"
+                                    @updatestyle="updateStyle($event)"></css-color-shifter>
                             </li>
                             <font-shifter @updatestyle="updateStyle($event)">
                             </font-shifter>
-                            <button type="button" class="btn btn-primary" v-on:click="onShowStyles()">Show style</button>
+                            <button type="button" class="btn btn-primary" v-on:click="onShowStyles()">Show
+                                style</button>
                             <theme-dropdown @updatestyle="updateStyle($event)"></theme-dropdown>
                         </div>
                     </ul>
 
 
                 </div>
-
-            </nav>
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div id="app2">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Kalender</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-                        </div>
-                        <div class="modal-body">
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div id="app2">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Kalender</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
                                 <label for="name">Name:</label>
                                 <input id="name" class="form-control" type="text" v-model="name" />
                                 <label for="name">Year:</label>
-                                <input id="year" class="form-control" type="text" v-model="year"/>
-                                <!--v-model is doing the magic here-->
-                                <p>{{ name }}</p>
-                                <div v-for="activity in items">
-                                   <activity-editor v-bind:activity="activity"></activity-editor>
-                                </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" v-on:click="addItem" >Add event</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" v-on:click="updateWheel" data-dismiss="modal">Save changes</button>
+                                <input id="year" class="form-control" type="text" v-model="year" />
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Navn</th>
+                                        <th scope="col">Level</th>
+                                        <th scope="col">Periode/Dato</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody >
+                                        <template v-for="act2 in items">
+                                            <activity-editorial v-bind:activity="act2" v-bind:edit="false"></activity-editorial>
+                                        </template>    
+                                </tbody>
+                                </table>    
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" v-on:click="addItem">Add event</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" v-on:click="updateWheel"
+                                    data-dismiss="modal">Save changes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
+            </nav>
+           
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                 <div id="chart">
                 </div>
             </main>
         </div>
     </div>
+
     </div>
-    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
     <script src="//unpkg.com/vue-airbnb-style-datepicker@latest/dist/vue-airbnb-style-datepicker.js"></script>
     <script src="/scripts/dist/vue-color.js"></script>
     <script src="/scripts/helpers.js"></script>
     <script src="/scripts/calendar.js"></script>
     <script src="/scripts/savesvgaspng.js"></script>
-    <script src="/scripts/d3yearwheel.js"></script>
-    <script src="/scripts/wheeldata.js"></script>
+    <script src="/scripts/d3yearwheel-v5.js"></script>
+    <!--<script src="/scripts/wheeldata.js"></script>-->
     <script src="/scripts/vue/fontshifter.js"></script>
     <script src="/scripts/vue/wheelpicker.js"></script>
     <!--<script src="/scripts/vue/styleapp.js"></script>-->
-  
-    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="//unpkg.com/vuejs-datepicker"></script>
     <script type="text/javascript">
         const apiConnection = axios.create({
-                baseURL: 'https://ywheel-api.herokuapp.com/',
-                timeout: 7500
-                });
-                var activityData =[{"_id":"5cd1b23c44dfc80004daf687","name":"Jallsdfsdf","level":0,"startDateID":120,"endDateID":150,"_i":0},{"_id":"5cd1b24444dfc80004daf688","name":"Jall","level":0,"startDateID":59,"endDateID":87,"_i":1},{"_id":"5cd1b59244dfc80004daf689","name":"QWEww","level":1,"startDateID":151,"endDateID":179,"_i":2},{"_id":"5cd1b61fa1d5b60004fc3781","name":"QWE","level":0,"startDateID":151,"endDateID":179,"_i":3}]; 
-                /*[{
-					name: "Aktivitet X",
-					startDateID: 0,
-					endDateID: 119,
-					level: 0,
-					_id:"asd"
-				}, {
-					name: "Aktivitet Y",
-					startDateID: 119,
-					endDateID: 153,
-					level: 0,
-					_id:"asd2"
-				},
-				 {
-					name: "Aktivitet Z",
-					startDateID: 153,
-					endDateID: 170,
-					level: 0,
-					_id:"asd3"
-				}
-				, {
-					name: "Ekstra moro",
-					startDateID: 0,
-					endDateID: 58,
-					level: 1,
-					_id:"asd4"
-				}, {
-					name: "Sommerferie",
-					startDateID: 150,
-					endDateID: 256,
-					level: 1,
-					_id:"as5"
-				}];*/
-				var eventData = [{
-						name: "Connect",
-						startDateID: 311,
-						_id:"evt1"
-					}, {
-						name: "ServiceNow release",
-						startDateID: 35,
-						_id:"evt2"
-					}
+            baseURL: 'https://ywheel-api.herokuapp.com/',
+            timeout: 7500
+        });
+        var activityData = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Jallsdfsdf", "level": 0, "startDateID": 120, "endDateID": 150, "_i": 0 }, { "_id": "5cd1b24444dfc80004daf688", "name": "Jall", "level": 0, "startDateID": 59, "endDateID": 87, "_i": 1 }, { "_id": "5cd1b59244dfc80004daf689", "name": "QWEww", "level": 1, "startDateID": 151, "endDateID": 179, "_i": 2 }, { "_id": "5cd1b61fa1d5b60004fc3781", "name": "QWE", "level": 0, "startDateID": 151, "endDateID": 179, "_i": 3 }];
+        /*[{
+            name: "Aktivitet X",
+            startDateID: 0,
+            endDateID: 119,
+            level: 0,
+            _id:"asd"
+        }, {
+            name: "Aktivitet Y",
+            startDateID: 119,
+            endDateID: 153,
+            level: 0,
+            _id:"asd2"
+        },
+         {
+            name: "Aktivitet Z",
+            startDateID: 153,
+            endDateID: 170,
+            level: 0,
+            _id:"asd3"
+        }
+        , {
+            name: "Ekstra moro",
+            startDateID: 0,
+            endDateID: 58,
+            level: 1,
+            _id:"asd4"
+        }, {
+            name: "Sommerferie",
+            startDateID: 150,
+            endDateID: 256,
+            level: 1,
+            _id:"as5"
+        }];*/
+        var eventData = [{
+            name: "Connect",
+            startDateID: 311,
+            _id: "evt1"
+        }, {
+            name: "ServiceNow release",
+            startDateID: 35,
+            _id: "evt2"
+        }
 
-				]
+        ]
 
-        
+
         let dataItems = [];
         //renderData(activityData, eventData);
         function parseData(dataArray) {
-            let temp=[];
+            let temp = [];
             for (let i = 0; i < dataArray.length; i++) {
                 let res = {
                     name: dataArray[i].name,
                     startDate: dateIdToJsDate(dataArray[i].startDateID),
                     endDate: dateIdToJsDate(dataArray[i].endDateID),
                     level: dataArray[i].level,
-                    _id:dataArray[i]._id
+                    _id: dataArray[i]._id
                 }
                 temp.push(res);
             }
             temp.sort(sortItems);
             return temp;
         }
-        
-        parseData(activityData.concat(eventData));
-        
-                    renderData(activityData, eventData);
 
-       
-       
+        parseData(activityData.concat(eventData));
+
+        renderData(activityData, eventData);
+
+
+
     </script>
     <script src="scripts/helpers.js"></script>
     <script src="scripts/vue/levelEditor.js"></script>
+    <script src="scripts/vue/activityEditor2.js"></script>
     <script src="scripts/vue/activityEditor.js"></script>
     <script src="scripts/vue/themeshifter.js"></script>
     <script src="scripts/vue/colorP.js"></script>
