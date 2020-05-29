@@ -47,7 +47,7 @@ Vue.component('activity-editorial', {
   <div v-if="edit">{{duration}} - {{hasRoomForText}}
   </div>
   </td>
-  <td><button v-on:click="remove(activity)">Delete</button></td>
+  <td><button v-on:click="$emit('deleteact',activity)">Delete</button></td>
   </tr>`,
     data: function () {
         return {
@@ -87,7 +87,7 @@ Vue.component('activity-editorial', {
             return "valid-feedback";
         },
         remove: function(activity){
-            alert(activity);
+            this.$emit('deleteActivity',activity);
         },
         onClosed: function () {
             var datesStr = this.formatDates(this.inputDateOne, this.inputDateTwo)

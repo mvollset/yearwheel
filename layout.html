@@ -124,8 +124,8 @@
                                       </tr>
                                     </thead>
                                     <tbody >
-                                        <template v-for="act2 in items">
-                                            <activity-editorial v-bind:activity="act2" v-bind:edit="false"></activity-editorial>
+                                        <template v-for="activity in items" >
+                                            <activity-editorial v-bind:activity="activity" v-bind:edit="false" v-on:deleteact="deleteActivity"></activity-editorial>
                                         </template>    
                                 </tbody>
                                 </table>    
@@ -176,39 +176,6 @@
             timeout: 7500
         });
         var activityData = [{ "_id": "5cd1b23c44dfc80004daf687", "name": "Jallsdfsdf", "level": 0, "startDateID": 120, "endDateID": 150, "_i": 0 }, { "_id": "5cd1b24444dfc80004daf688", "name": "Jall", "level": 0, "startDateID": 59, "endDateID": 87, "_i": 1 }, { "_id": "5cd1b59244dfc80004daf689", "name": "QWEww", "level": 1, "startDateID": 151, "endDateID": 179, "_i": 2 }, { "_id": "5cd1b61fa1d5b60004fc3781", "name": "QWE", "level": 0, "startDateID": 151, "endDateID": 179, "_i": 3 }];
-        /*[{
-            name: "Aktivitet X",
-            startDateID: 0,
-            endDateID: 119,
-            level: 0,
-            _id:"asd"
-        }, {
-            name: "Aktivitet Y",
-            startDateID: 119,
-            endDateID: 153,
-            level: 0,
-            _id:"asd2"
-        },
-         {
-            name: "Aktivitet Z",
-            startDateID: 153,
-            endDateID: 170,
-            level: 0,
-            _id:"asd3"
-        }
-        , {
-            name: "Ekstra moro",
-            startDateID: 0,
-            endDateID: 58,
-            level: 1,
-            _id:"asd4"
-        }, {
-            name: "Sommerferie",
-            startDateID: 150,
-            endDateID: 256,
-            level: 1,
-            _id:"as5"
-        }];*/
         var eventData = [{
             name: "Connect",
             startDateID: 311,

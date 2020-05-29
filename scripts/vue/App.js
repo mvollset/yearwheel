@@ -86,6 +86,17 @@ var app = new Vue({
             
 
         },
+        deleteActivity: async function (activity){
+            try{
+                let res = await apiConnection.delete(`/activities/${activity._id}`);
+                let p = this.items.findIndex((p)=>p._id==activity._id);
+                this.items.splice(p,1);
+                this.drawWheel();
+            }
+            catch (err){
+                alert(err);
+            }
+        },
         drawWheel() {
             const activityData2 = [];
             const eventData2 = [];
